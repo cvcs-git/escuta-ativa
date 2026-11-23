@@ -762,3 +762,94 @@ button.microfone:active .microfone__disco {
 .vozes__dica {
   font-weight: 400;
 }
+
+/* ---------- T3 Perguntar: convite para falar ---------- */
+
+.convite {
+  position: relative;
+  margin: 44px auto 12px;
+}
+
+.convite__balao {
+  position: absolute;
+  left: 50%;
+  top: -42px;
+  transform: translateX(-50%);
+  z-index: 3;
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: var(--texto);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.convite__balao::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--texto);
+}
+
+.convite__disco {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: pointer;
+  background: radial-gradient(circle at 34% 28%, #e0541f, var(--acao) 60%, var(--acao-pressionada));
+  box-shadow: 0 14px 28px rgba(143, 41, 9, 0.3);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.convite__disco:active {
+  transform: scale(0.97);
+}
+
+.convite__disco svg {
+  width: 64px;
+  height: 64px;
+}
+
+.convite__pulso {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid var(--acao);
+  animation: convite-pulso 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.convite__pulso--2 {
+  animation-delay: 0.9s;
+}
+
+@keyframes convite-pulso {
+  from { transform: scale(1); opacity: 0.7; }
+  to { transform: scale(1.35); opacity: 0; }
+}
+
+.convite__dedo {
+  position: absolute;
+  right: -6px;
+  bottom: -28px;
+  width: 70px;
+  height: 90px;
+  pointer-events: none;
+  animation: convite-toque 1.8s ease-in-out infinite;
+}
+
+@keyframes convite-toque {
+  0%, 100% { transform: translate(0, 0); }
+  40% { transform: translate(-8px, -10px); }
+  55% { transform: translate(-8px, -10px) scale(0.94); }
+}

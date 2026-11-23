@@ -101,10 +101,24 @@ export default function Perguntar() {
           <TextoLido como="h2" texto={INTRO_TITULO} />
           <TextoLido como="p" className="apoio" texto={INTRO_EXEMPLO} />
           {etapa.aviso && <TextoLido como="p" className="aviso aviso--neutro" texto={etapa.aviso} />}
-          <button className="microfone" onClick={comecarEscuta}>
-            <span className="microfone__disco"><IconeMicrofone /></span>
-            <span className="microfone__rotulo">Tocar e falar</span>
-          </button>
+          {/* Convite para falar: balão, círculos pulsando e um dedo mostrando o toque. */}
+          <div className="convite">
+            <span className="convite__balao" aria-hidden="true">Toque aqui e fale</span>
+            <button className="convite__disco" onClick={comecarEscuta} aria-label="Tocar e falar">
+              <span className="convite__pulso" aria-hidden="true" />
+              <span className="convite__pulso convite__pulso--2" aria-hidden="true" />
+              <IconeMicrofone />
+            </button>
+            <svg className="convite__dedo" viewBox="-14 -6 56 72" aria-hidden="true">
+              <path
+                d="M0 4 C0 -3 10 -3 10 4 V20 C10 14 19 14 19 20 V22 C19 16 28 16 28 22 V24 C28 18 37 18 37 24 V40 C37 54 28 62 17 62 H13 C5 62 1 57 -3 50 L-11 35 C-14 29 -7 25 -3 29 L0 33 Z"
+                fill="#fff"
+                stroke="#212121"
+                strokeWidth="3"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </div>
           <div className="rodape">
             <button className="botao botao--secundario" onClick={() => setEtapa({ tipo: "digitar" })}>
               Prefiro escrever
