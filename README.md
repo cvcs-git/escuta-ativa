@@ -14,7 +14,7 @@ A equipe entrevistou cinco pessoas de 61 a 89 anos. Todas relataram ao menos uma
 
 ## Funcionalidades
 
-**Perguntar falando.** A pessoa faz a pergunta em voz alta, confere o texto que o aplicativo entendeu e recebe a resposta em até cinco passos curtos, mostrados um por vez e lidos em voz. Se não encontrar um botão no próprio aparelho, pode pedir outra explicação para aquele passo.
+**Perguntar falando.** A pessoa faz a pergunta em voz alta, confere o texto que o aplicativo entendeu e recebe a resposta em até cinco passos curtos, mostrados um por vez e lidos em voz. Cada passo pode trazer uma ilustração da tela do celular, com um dedo indicando onde tocar. Se não encontrar um botão no próprio aparelho, a pessoa pode pedir outra explicação para aquele passo.
 
 **Isso é golpe?** A pessoa cola ou dita uma mensagem recebida, e o aplicativo a classifica como provável golpe, suspeita ou sem sinais de golpe, sempre com o motivo e uma orientação prática. Antes de qualquer envio, o aplicativo detecta senhas e códigos na mensagem, bloqueia o envio e alerta o usuário.
 
@@ -24,10 +24,11 @@ A equipe entrevistou cinco pessoas de 61 a 89 anos. Todas relataram ao menos uma
 
 ## Uso de inteligência artificial
 
-O modelo de linguagem atende duas tarefas, a resposta passo a passo e a classificação de golpes. Ele sempre devolve JSON em formato fixo, e o aplicativo decide como exibir cada campo. Essa separação garante três coisas:
+O modelo de linguagem atende duas tarefas, a resposta passo a passo e a classificação de golpes. Ele sempre devolve JSON em formato fixo, e o aplicativo decide como exibir cada campo. Essa separação garante quatro coisas:
 
 - **Formato validado:** respostas fora do formato, com mais de cinco passos ou com frases longas são descartadas.
 - **Rótulos controlados pelo app:** o título, a cor e o ícone do resultado de golpe vêm do aplicativo, e não da IA. Por isso, uma mensagem nunca é apresentada como "segura".
+- **Ilustrações sem imagens geradas:** a IA não desenha. Para cada passo, ela escolhe um de 13 modelos de tela (aplicativos, lista de opções, menu, chave liga/desliga, barra, botões, campo, gesto, conversa, chamada, câmera, teclado e botões do aparelho) e preenche os textos. O app valida a descrição, inclusive se o elemento apontado pelo dedo é o mesmo citado no texto do passo, e desenha com as mesmas peças das lições. Na dúvida, o passo aparece só com o texto.
 - **Serviço trocável:** o serviço de IA segue uma interface única (`ServicoIA`). A versão simulada e a versão com o Gemini podem ser trocadas sem alterar as telas.
 
 As lições não usam IA, o que reduz o risco de instruções incorretas nos conteúdos de aprendizagem.
@@ -86,12 +87,12 @@ src/
 │   └── ajustes/         T7: letra, leitura em voz, velocidade e escolha da voz
 ├── compartilhado/
 │   ├── componentes/     Botão, Tela, PassoAPasso, TextoLido, Ondas, EstadoErro, ícones...
-│   ├── ilustracoes/     peças de desenho das telas de celular (moldura, dedo, listas, ícones)
+│   ├── ilustracoes/     peças de desenho e os 13 modelos de tela usados nas respostas do assistente
 │   ├── preferencias/    ajustes do usuário, guardados só no aparelho
 │   ├── hooks/           estado da conexão
 │   └── utilitarios/     funções puras de texto
 ├── servicos/
-│   ├── ia/              contrato, validação das respostas, regras de chamada e serviço simulado
+│   ├── ia/              contrato, validação das respostas e das ilustrações, regras de chamada e serviço simulado
 │   ├── voz/             leitura em voz com destaque, escolha da voz e reconhecimento de fala
 │   └── seguranca/       detecção de senhas e códigos antes do envio
 ├── estilos/             tokens (cores e medidas), base, layout e componentes básicos
@@ -104,7 +105,7 @@ src/
 - **Contrato único para a IA.** As telas dependem apenas da interface `ServicoIA`. O serviço simulado e o Gemini são intercambiáveis em um único ponto (`servicos/ia/index.ts`).
 - **Estilos ao lado de quem os usa.** Tokens e base são globais; cada tela e cada componente importa o próprio CSS.
 - **Sem carregamento sob demanda das telas**, de propósito: depois do primeiro acesso, o app inteiro está no aparelho, e as lições abrem mesmo sem internet.
-- **Testes ao lado do código** (`*.test.ts`): validação das respostas da IA, máquinas de estados, detecção de senhas, escolha de voz e utilitários.
+- **Testes ao lado do código** (`*.test.ts`): validação das respostas e das ilustrações da IA, respostas simuladas, máquinas de estados, detecção de senhas, escolha de voz e utilitários.
 
 ## Como executar
 

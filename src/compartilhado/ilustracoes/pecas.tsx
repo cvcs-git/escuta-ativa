@@ -9,6 +9,7 @@
  * Coordenadas: todas as telas usam a área de 240 × 320 definida em <Celular>.
  */
 import type { ReactNode } from "react";
+import { CORES_APP, CORES_LETRA, curto, glifoDoApp, type Glifo } from "./auxiliares";
 import "./ilustracoes.css";
 
 export const GRAFITE = "#212121";
@@ -91,8 +92,6 @@ export function Cabecalho({ titulo, voltar = true }: { titulo: string; voltar?: 
 
 /* ---------- Ícones de aplicativos genéricos ---------- */
 
-export type Glifo = "engrenagem" | "camera" | "balao" | "telefone" | "banco" | "galeria";
-
 export function GlifoApp({ tipo, cx, cy }: { tipo: Glifo; cx: number; cy: number }) {
   const s = {
     fill: "none",
@@ -162,15 +161,6 @@ export function GlifoApp({ tipo, cx, cy }: { tipo: Glifo; cx: number; cy: number
       );
   }
 }
-
-const CORES_APP: Record<Glifo, string> = {
-  engrenagem: "#5f6b73",
-  camera: "#4a4a4a",
-  balao: "#2e7d32",
-  telefone: "#1565c0",
-  banco: "#6a1b9a",
-  galeria: "#c2185b",
-};
 
 export function IconeApp({ x, y, tipo, nome }: { x: number; y: number; tipo: Glifo; nome: string }) {
   return (
@@ -375,5 +365,58 @@ export function BotaoNaTela({
         {texto}
       </text>
     </g>
+  );
+}
+
+/* ---------- Peças genéricas (modelos do assistente) ---------- */
+
+/** Ícone de app a partir do nome: desenho próprio para apps comuns, inicial para os outros. */
+export function IconeAppPorNome({ x, y, nome, posicao }: { x: number; y: number; nome: string; posicao: number }) {
+  const glifo = glifoDoApp(nome);
+  return (
+    <g>
+      <rect
+        x={x - 24}
+        y={y - 24}
+        width="48"
+        height="48"
+        rx="13"
+        fill={glifo ? CORES_APP[glifo] : CORES_LETRA[posicao % CORES_LETRA.length]}
+      />
+      {glifo ? (
+        <GlifoApp tipo={glifo} cx={x} cy={y} />
+      ) : (
+        <text x={x} y={y + 8} fontSize="22" fontWeight="700" fill="#fff" textAnchor="middle">
+          {nome.trim()[0]?.toUpperCase()}
+        </text>
+      )}
+      <text x={x} y={y + 40} fontSize="10" textAnchor="middle" fill={GRAFITE}>
+        {curto(nome, 13)}
+      </text>
+    </g>
+  );
+}
+
+/** Uma linha de lista de opções (bolinha, texto e seta). */
+export function LinhaDeLista({ y, texto, destaque }: { y: number; texto: string; destaque: boolean }) {
+  return (
+    <g>
+      <rect x="15" y={y} width="210" height="44" fill="#fff" />
+      <line x1="30" y1={y + 44} x2="225" y2={y + 44} stroke={LINHA} strokeWidth="1.2" />
+      <circle cx="38" cy={y + 22} r="9" fill={destaque ? LARANJA : "#c9c9c9"} opacity={destaque ? 0.85 : 1} />
+      <text x="56" y={y + 27} fontSize="13" fontWeight={destaque ? 700 : 400} fill={GRAFITE}>
+        {curto(texto, 20)}
+      </text>
+      <path d={`M206 ${y + 16} l6 6 -6 6`} fill="none" stroke={APOIO} strokeWidth="2" strokeLinecap="round" />
+    </g>
+  );
+}
+
+/** Aviso curto em laranja, centralizado (ex.: "Segure o dedo por 2 segundos"). */
+export function AvisoNaTela({ y, texto }: { y: number; texto: string }) {
+  return (
+    <text x="120" y={y} fontSize="12.5" fontWeight="700" textAnchor="middle" fill={LARANJA}>
+      {texto}
+    </text>
   );
 }

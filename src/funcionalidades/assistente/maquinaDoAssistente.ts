@@ -9,7 +9,7 @@
  * É uma função pura (sem efeitos): fácil de testar e de ler. Os efeitos (microfone,
  * chamadas à IA, voz) ficam no hook useAssistente.
  */
-import type { RespostaAssistente, TipoErroIA } from "@/servicos/ia";
+import type { EspecIlustracao, RespostaAssistente, TipoErroIA } from "@/servicos/ia";
 import type { ErroVoz } from "@/servicos/voz/useReconhecimento";
 import { TEXTOS } from "./textos";
 
@@ -19,7 +19,7 @@ export type Etapa =
   | { tipo: "digitar"; aviso?: string }
   | { tipo: "confirmar" }
   | { tipo: "pensando" }
-  | { tipo: "resposta"; passos: string[]; dica?: string }
+  | { tipo: "resposta"; passos: string[]; ilustracoes: (EspecIlustracao | null)[]; dica?: string }
   | { tipo: "concluida"; dica?: string }
   | { tipo: "fora"; mensagem: string }
   | { tipo: "erro"; erro: TipoErroIA };
@@ -73,7 +73,12 @@ export function maquinaDoAssistente(estado: EstadoAssistente, acao: AcaoAssisten
       return {
         ...estado,
         etapa: acao.resposta.dentroDoEscopo
-          ? { tipo: "resposta", passos: acao.resposta.passos, dica: acao.resposta.dica }
+          ? {
+              tipo: "resposta",
+              passos: acao.resposta.passos,
+              ilustracoes: acao.resposta.ilustracoes,
+              dica: acao.resposta.dica,
+            }
           : { tipo: "fora", mensagem: acao.resposta.mensagem },
       };
 

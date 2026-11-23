@@ -5,9 +5,15 @@
  * resposta veio do Gemini ou da simulação. Trocar de serviço não exige mudar telas.
  */
 
-/** Resposta do assistente: um passo a passo ou a recusa de uma pergunta fora do escopo. */
+import type { EspecIlustracao } from "./ilustracao";
+
+/**
+ * Resposta do assistente: um passo a passo ou a recusa de uma pergunta fora do escopo.
+ * `ilustracoes` tem uma posição por passo; `null` quando o passo não tem imagem.
+ */
 export type RespostaAssistente =
-  { dentroDoEscopo: true; passos: string[]; dica?: string } | { dentroDoEscopo: false; mensagem: string };
+  | { dentroDoEscopo: true; passos: string[]; ilustracoes: (EspecIlustracao | null)[]; dica?: string }
+  | { dentroDoEscopo: false; mensagem: string };
 
 /** Classificação de uma mensagem. Nunca existe "seguro": no máximo, "sem sinais". */
 export type Classificacao = "provavel_golpe" | "suspeita" | "sem_sinais";

@@ -24,8 +24,8 @@ import {
   Toque,
   VERDE,
   VERMELHO,
-  type Glifo,
 } from "@/compartilhado/ilustracoes/pecas";
+import type { Glifo } from "@/compartilhado/ilustracoes/auxiliares";
 
 export const ILUSTRACOES_DAS_LICOES: Record<string, ReactNode> = {
   /* Aumentar o tamanho da letra */

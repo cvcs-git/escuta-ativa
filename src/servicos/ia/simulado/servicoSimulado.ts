@@ -8,7 +8,7 @@
  *   ?simular=timeout | indisponivel | formato | limite | lento
  * Exemplo: .../#/perguntar?simular=timeout
  */
-import { ErroIA, type RespostaAssistente, type ServicoIA } from "../contrato";
+import { ErroIA, type ServicoIA } from "../contrato";
 import { validarAssistente, validarGolpe } from "../validacao";
 import { normalizar } from "@/compartilhado/utilitarios/texto";
 import { classificarGolpe } from "./classificarGolpe";
@@ -59,14 +59,34 @@ async function simularRede(sinal: AbortSignal): Promise<Simulacao | null> {
   return simulacao;
 }
 
-const buscarResposta = (pergunta: string) => {
+/**
+ * Escolhe o tema que melhor combina com a pergunta: soma o tamanho das palavras-chave
+ * encontradas (chaves mais longas e específicas pesam mais). Em empate, vale o primeiro.
+ */
+export function buscarResposta(pergunta: string) {
   const texto = normalizar(pergunta);
-  return RESPOSTAS.find((r) => r.chaves.some((chave) => texto.includes(chave)));
-};
+  let melhor: (typeof RESPOSTAS)[number] | undefined;
+  let melhorPontuacao = 0;
+  for (const resposta of RESPOSTAS) {
+    const pontuacao = resposta.chaves.reduce((soma, chave) => (texto.includes(chave) ? soma + chave.length : soma), 0);
+    if (pontuacao > melhorPontuacao) {
+      melhor = resposta;
+      melhorPontuacao = pontuacao;
+    }
+  }
+  return melhor;
+}
 
-function responder(pergunta: string): RespostaAssistente {
+/** Monta a resposta no mesmo formato JSON que o Gemini devolve (antes da validação). */
+function responder(pergunta: string): unknown {
   const achada = buscarResposta(pergunta);
-  if (achada) return { dentroDoEscopo: true, passos: achada.passos, dica: achada.dica };
+  if (achada) {
+    return {
+      dentroDoEscopo: true,
+      passos: achada.passos.map(({ texto, ilustracao }) => ({ texto, ilustracao })),
+      dica: achada.dica,
+    };
+  }
 
   const sobreOCelular = TEMAS_DO_CELULAR.some((tema) => normalizar(pergunta).includes(tema));
   if (sobreOCelular) return { dentroDoEscopo: true, passos: PASSOS_GENERICOS, dica: DICA_GENERICA };
@@ -84,9 +104,8 @@ export function criarServicoSimulado(): ServicoIA {
 
     async explicarDeOutroJeito(pergunta, passo, sinal) {
       await simularRede(sinal);
-      const achada = buscarResposta(pergunta);
-      const indice = achada?.passos.indexOf(passo) ?? -1;
-      return achada && indice >= 0 ? achada.outroJeito[indice] : OUTRO_JEITO_GENERICO;
+      const achado = buscarResposta(pergunta)?.passos.find((p) => p.texto === passo);
+      return achado?.outroJeito ?? OUTRO_JEITO_GENERICO;
     },
 
     async verificarGolpe(mensagem, sinal) {

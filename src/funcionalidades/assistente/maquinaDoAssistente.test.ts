@@ -43,7 +43,7 @@ describe("máquina de estados do assistente", () => {
   it("concluir guarda a dica da resposta", () => {
     const resposta = {
       pergunta: "Pix",
-      etapa: { tipo: "resposta" as const, passos: ["Abra o banco."], dica: "Calma." },
+      etapa: { tipo: "resposta" as const, passos: ["Abra o banco."], ilustracoes: [null], dica: "Calma." },
     };
     expect(m(resposta, { tipo: "concluir" }).etapa).toEqual({ tipo: "concluida", dica: "Calma." });
   });

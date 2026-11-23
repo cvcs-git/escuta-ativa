@@ -11,6 +11,7 @@ import { Ondas } from "@/compartilhado/componentes/Ondas";
 import { PassoAPasso } from "@/compartilhado/componentes/PassoAPasso";
 import { Pensando } from "@/compartilhado/componentes/Pensando";
 import { Tela } from "@/compartilhado/componentes/Tela";
+import { Ilustracao } from "@/compartilhado/ilustracoes/Ilustracao";
 import { ConfirmarPergunta } from "./componentes/ConfirmarPergunta";
 import { ConviteParaFalar } from "./componentes/ConviteParaFalar";
 import { EscreverPergunta } from "./componentes/EscreverPergunta";
@@ -64,6 +65,9 @@ export default function PaginaPerguntar() {
             </div>
             <PassoAPasso
               passos={etapa.passos}
+              ilustracoes={etapa.ilustracoes.map((espec, i) =>
+                espec ? <Ilustracao espec={espec} descricao={etapa.passos[i]} /> : undefined,
+              )}
               rotuloConcluir="Terminei"
               outroJeito={(i) => assistente.explicarDeOutroJeito(etapa.passos[i])}
               aoConcluir={assistente.concluir}

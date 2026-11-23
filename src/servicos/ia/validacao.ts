@@ -6,6 +6,7 @@
  * estado de erro, em vez de exibir um conteúdo imprevisível para a pessoa idosa.
  */
 import { ErroIA, type Classificacao, type RespostaAssistente, type RespostaGolpe } from "./contrato";
+import { validarIlustracao } from "./ilustracao";
 
 export const MAX_PASSOS = 5;
 export const MAX_PALAVRAS_POR_PASSO = 20;
@@ -24,15 +25,25 @@ export function validarAssistente(dado: unknown): RespostaAssistente {
     return { dentroDoEscopo: false, mensagem: dado.mensagem };
   }
 
-  const { passos } = dado;
-  const passosValidos =
-    Array.isArray(passos) &&
-    passos.length > 0 &&
-    passos.length <= MAX_PASSOS &&
-    passos.every((p) => ehTexto(p) && contarPalavras(p) <= MAX_PALAVRAS_POR_PASSO);
+  // Cada passo pode vir como texto simples ou como { texto, ilustracao }.
+  if (!Array.isArray(dado.passos) || dado.passos.length === 0 || dado.passos.length > MAX_PASSOS) {
+    throw new ErroIA("formato");
+  }
+  const passos = dado.passos.map((p) => (ehObjeto(p) ? p.texto : p));
+  const passosValidos = passos.every((p) => ehTexto(p) && contarPalavras(p) <= MAX_PALAVRAS_POR_PASSO);
   if (!passosValidos) throw new ErroIA("formato");
 
-  return { dentroDoEscopo: true, passos: passos as string[], dica: ehTexto(dado.dica) ? dado.dica : undefined };
+  // Uma ilustração inválida não derruba a resposta: o passo só fica sem imagem.
+  const ilustracoes = dado.passos.map((p, i) =>
+    ehObjeto(p) && p.ilustracao ? validarIlustracao(p.ilustracao, passos[i] as string) : null,
+  );
+
+  return {
+    dentroDoEscopo: true,
+    passos: passos as string[],
+    ilustracoes,
+    dica: ehTexto(dado.dica) ? dado.dica : undefined,
+  };
 }
 
 export function validarGolpe(dado: unknown): RespostaGolpe {

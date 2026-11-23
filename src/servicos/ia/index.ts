@@ -9,6 +9,7 @@ import type { ServicoIA } from "./contrato";
 import { criarServicoSimulado } from "./simulado/servicoSimulado";
 
 export * from "./contrato";
+export type { EspecIlustracao, ModeloIlustracao } from "./ilustracao";
 export { chamarIA, tipoDoErro, AVISO_PENSANDO_MS } from "./chamarIA";
 
 let instancia: ServicoIA | null = null;
