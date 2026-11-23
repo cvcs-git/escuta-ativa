@@ -1,4 +1,7 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useFala } from "../voz/FalaContexto";
+import { TextoLido } from "./TextoLido";
 import type { TipoErroIA } from "../servicos/ia";
 import { IconeRepetir } from "./Icones";
 
@@ -29,11 +32,15 @@ const TEXTOS: Record<TipoErroIA, { titulo: string; texto: string }> = {
 export function EstadoErro({ tipo, aoTentarDeNovo }: { tipo: TipoErroIA; aoTentarDeNovo: () => void }) {
   const { titulo, texto } = TEXTOS[tipo];
   const podeTentar = tipo !== "limite";
+  const { falar } = useFala();
+  useEffect(() => {
+    falar(`${titulo}. ${texto}`);
+  }, [falar, titulo, texto]);
   return (
     <section className="estado-erro" role="alert">
       <IconeRepetir className="estado-erro__icone" />
-      <h2>{titulo}</h2>
-      <p className="apoio">{texto}</p>
+      <TextoLido como="h2" texto={titulo} />
+      <TextoLido como="p" className="apoio" texto={texto} />
       <div className="rodape">
         {podeTentar && (
           <button className="botao" onClick={aoTentarDeNovo}>

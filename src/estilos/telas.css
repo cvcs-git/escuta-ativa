@@ -27,44 +27,136 @@ fieldset.escolha legend {
 
 /* ---------- T2 Início ---------- */
 
-.inicio__saudacao {
-  font-size: 1.4rem;
-  line-height: 1.25;
-}
-
-.inicio__opcoes {
+.inicio__topo {
+  padding: 22px 4px 26px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 4px;
 }
 
-.inicio__opcoes .botao {
-  justify-content: flex-start;
-  padding-left: 24px;
-  font-size: 1.1rem;
-  text-align: left;
+.inicio__marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--texto-apoio);
+  margin-bottom: 14px;
 }
 
-/* O gesto principal do app: perguntar falando. */
-.inicio__perguntar {
-  min-height: 148px;
+.inicio__ponto {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--acao);
+}
+
+.inicio__saudacao {
+  font-size: 1.6rem;
+  line-height: 1.1;
+}
+
+.inicio__pergunta {
+  font-size: 1.05rem;
+  color: var(--texto-apoio);
+}
+
+.inicio__ouvir {
+  align-self: flex-start;
+  margin-top: 14px;
+  min-height: 56px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 2px solid var(--acao);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--texto);
+  font-weight: 700;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 3px 0 var(--acao);
+}
+
+/* Área de toque de 88 px, mesmo com o botão visualmente menor. */
+.inicio__ouvir::after {
+  content: "";
+  position: absolute;
+  inset: -16px -8px;
+}
+
+.inicio__ouvir:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--acao);
+}
+
+.inicio__ouvir svg {
+  width: 1.4em;
+  height: 1.4em;
+  color: var(--acao);
+}
+
+/* Os três cartões principais têm exatamente o mesmo tamanho. */
+.inicio__opcoes {
+  display: grid;
+  grid-auto-rows: 1fr;
   gap: 20px;
 }
 
-.inicio__mic {
-  width: 84px;
-  height: 84px;
+.cartao-vidro {
+  min-height: 112px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--texto);
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.74);
+  -webkit-backdrop-filter: blur(6px) saturate(1.3);
+  backdrop-filter: blur(6px) saturate(1.3);
+  border: 3px solid var(--acao);
+  border-radius: 24px;
+  box-shadow: 0 5px 0 var(--acao), 0 14px 24px rgba(143, 41, 9, 0.14);
+  transition: transform 0.08s, box-shadow 0.08s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cartao-vidro:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--acao), 0 4px 8px rgba(143, 41, 9, 0.12);
+}
+
+/* Celulares sem suporte ao desfoque: cartão branco sólido, sem perder contraste. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .cartao-vidro {
+    background: #fff;
+  }
+}
+
+.cartao-vidro__icone {
+  width: 64px;
+  height: 64px;
   flex: none;
   border-radius: 50%;
-  background: #fff;
-  color: var(--acao);
+  background: var(--acao);
+  color: #fff;
   display: grid;
   place-items: center;
 }
 
-.inicio__mic svg {
-  width: 46px;
-  height: 46px;
+.cartao-vidro__icone svg {
+  width: 34px;
+  height: 34px;
+}
+
+.cartao-vidro:has([data-lendo]) {
+  outline: 5px solid var(--texto);
+  outline-offset: 4px;
 }
 
 /* ---------- Escolha de letra (T1 e T7) ---------- */
@@ -613,4 +705,42 @@ button.microfone:active .microfone__disco {
 .resultado--sem-sinais .resultado__titulo {
   color: var(--confirmacao);
   border-bottom: 2px solid var(--linha);
+}
+
+.passos__cartao .indicador-leitura {
+  grid-column: 2;
+}
+
+/* ---------- Ilustração do passo (lições) ---------- */
+
+.passos__figura {
+  margin: 0;
+  padding: 18px 16px 14px;
+  border-radius: var(--raio);
+  background: #dedad0;
+  display: flex;
+  justify-content: center;
+}
+
+.ilustracao {
+  display: block;
+  width: 100%;
+  max-width: 230px;
+  height: auto;
+  font-family: inherit;
+}
+
+.ilus-toque__pulso {
+  fill: none;
+  stroke: #bf360c;
+  stroke-width: 4;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: toque 1.4s ease-out infinite;
+}
+
+@keyframes toque {
+  from { transform: scale(1); opacity: 0.7; }
+  to { transform: scale(1.8); opacity: 0; }
 }

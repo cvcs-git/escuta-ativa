@@ -17,6 +17,9 @@
   --alerta: #d50000;       /* vermelho: alerta de golpe, sempre com ícone */
   --linha: #d6d6d6;        /* cinza: separação de seções e cartões */
   --foco: #0b57d0;
+  --sombra-acao: 0 5px 0 var(--acao-pressionada), 0 10px 20px rgba(33, 33, 33, 0.2);
+  --sombra-secundaria: 0 5px 0 #c4bdae, 0 10px 18px rgba(33, 33, 33, 0.12);
+  --sombra-confirmacao: 0 5px 0 #0e3a12, 0 10px 20px rgba(33, 33, 33, 0.2);
 
   --toque: 88px;
   --raio: 20px;
@@ -87,6 +90,8 @@ textarea {
 /* ---------- Estrutura da tela ---------- */
 
 .tela {
+  position: relative;
+  z-index: 1;
   max-width: var(--largura);
   min-height: 100dvh;
   margin: 0 auto;
@@ -154,31 +159,42 @@ textarea {
   cursor: pointer;
   width: 100%;
   -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--sombra-acao);
+  transition: transform 0.08s, box-shadow 0.08s;
 }
 
+/* Ao tocar, o botão "afunda": a pessoa vê que o toque funcionou. */
 .botao:active {
-  background: var(--acao-pressionada);
-  border-color: var(--acao-pressionada);
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--acao-pressionada), 0 3px 6px rgba(33, 33, 33, 0.15);
 }
 
 .botao--secundario {
   background: var(--superficie);
   color: var(--texto);
+  box-shadow: var(--sombra-secundaria);
 }
 
 .botao--secundario:active {
   background: #f6e3dc;
-  color: var(--texto);
+  box-shadow: 0 1px 0 #c4bdae;
 }
 
 .botao--confirmar {
   background: var(--confirmacao);
   border-color: var(--confirmacao);
+  box-shadow: var(--sombra-confirmacao);
+}
+
+.botao--confirmar:active {
+  box-shadow: 0 1px 0 #0e3a12;
 }
 
 .botao:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .botao svg {
@@ -187,11 +203,27 @@ textarea {
   height: 1.3em;
 }
 
+/* Menor na tela, mas a área de toque continua com 88 px (ver ::after). */
 .botao-voltar {
+  position: relative;
   width: auto;
-  min-width: 120px;
-  padding: 12px 16px;
-  font-size: 0.87rem;
+  min-height: 56px;
+  padding: 6px 16px 6px 10px;
+  gap: 6px;
+  border-width: 2px;
+  font-size: 0.8rem;
+  box-shadow: 0 3px 0 #c4bdae, 0 6px 12px rgba(33, 33, 33, 0.1);
+}
+
+.botao-voltar::after {
+  content: "";
+  position: absolute;
+  inset: -16px -10px;
+}
+
+.botao-voltar svg {
+  width: 1.1em;
+  height: 1.1em;
 }
 
 .dupla {
@@ -278,4 +310,163 @@ textarea {
 .lendo svg {
   width: 1.2em;
   height: 1.2em;
+}
+
+/* ---------- Leitura em voz: destaque palavra por palavra ---------- */
+
+.palavra-lida {
+  background: var(--acao);
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.02em 0.14em;
+  margin: 0 -0.14em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  box-shadow: 0 2px 0 var(--acao-pressionada);
+}
+
+.palavra-ja-lida {
+  text-decoration: underline;
+  text-decoration-color: #e8b9a8;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+}
+
+/* Sobre fundos laranja, vermelho ou escuro, o destaque se inverte. */
+.botao .palavra-lida,
+.aviso--alerta .palavra-lida,
+.topo .palavra-lida,
+.resultado--golpe .resultado__titulo .palavra-lida {
+  background: #fff;
+  color: var(--texto);
+  box-shadow: none;
+}
+
+.botao .palavra-ja-lida,
+.aviso--alerta .palavra-ja-lida,
+.topo .palavra-ja-lida,
+.resultado--golpe .resultado__titulo .palavra-ja-lida {
+  text-decoration-color: rgba(255, 255, 255, 0.6);
+}
+
+/* O bloco que está sendo lido ganha um contorno, para guiar o olhar. */
+.cartao:has([data-lendo]),
+.passos__alternativa:has([data-lendo]) {
+  border-color: var(--acao);
+  box-shadow: 0 0 0 3px var(--acao);
+}
+
+.botao:has([data-lendo]) {
+  outline: 5px solid var(--texto);
+  outline-offset: 4px;
+}
+
+.indicador-leitura {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--acao-pressionada);
+  font-size: 0.87rem;
+  font-weight: 700;
+}
+
+.indicador-leitura svg {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.indicador-leitura__barras {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 1.1em;
+}
+
+.indicador-leitura__barras span {
+  width: 4px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  animation: barra 0.9s ease-in-out infinite;
+}
+
+.indicador-leitura__barras span:nth-child(2) { animation-delay: 0.15s; }
+.indicador-leitura__barras span:nth-child(3) { animation-delay: 0.3s; }
+.indicador-leitura__barras span:nth-child(4) { animation-delay: 0.45s; }
+
+@keyframes barra {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+/* ---------- Ondas sonoras em tela inteira ---------- */
+
+.ondas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  --volume: 0;
+}
+
+.ondas__faixa {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.ondas__desliza {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200%;
+  height: 100%;
+  animation: ondas-deslizar 16s linear infinite;
+}
+
+.ondas__altura {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transform: scaleY(0.45);
+  transition: transform 0.5s ease;
+}
+
+.ondas path {
+  fill: none;
+  stroke: rgba(191, 54, 12, 0.24);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke 0.6s;
+}
+
+.ondas__faixa:nth-child(even) path {
+  stroke-width: 5;
+}
+
+/* Falando: laranja, um pouco mais altas. */
+.ondas[data-estado="falando"] path { stroke: rgba(191, 54, 12, 0.55); }
+.ondas[data-estado="falando"] .ondas__altura { transform: scaleY(0.55); }
+.ondas[data-estado="falando"] .ondas__desliza { animation-duration: 7s !important; }
+
+/* Ouvindo: correm no sentido contrário e acompanham a voz. */
+.ondas[data-estado="ouvindo"] path { stroke: rgba(191, 54, 12, 0.45); }
+.ondas[data-estado="ouvindo"] .ondas__altura {
+  transform: scaleY(calc(0.3 + var(--volume) * 0.3));
+  transition: transform 0.2s ease;
+}
+.ondas[data-estado="ouvindo"] .ondas__desliza {
+  animation-duration: 8s !important;
+  animation-direction: reverse;
+}
+
+/* Pensando: verdes, finas e quase paradas. */
+.ondas[data-estado="pensando"] path { stroke: rgba(27, 94, 32, 0.35); }
+.ondas[data-estado="pensando"] .ondas__altura { transform: scaleY(0.25); }
+.ondas[data-estado="pensando"] .ondas__desliza { animation-duration: 30s !important; }
+
+@keyframes ondas-deslizar {
+  to { transform: translateX(-50%); }
 }

@@ -9,6 +9,14 @@ import { chamarIA } from "../rede/chamarIA";
 import { ErroIA, obterServicoIA, type TipoErroIA } from "../servicos/ia";
 import { useFala } from "../voz/useFala";
 import { useReconhecimento } from "../voz/useReconhecimento";
+import { TextoLido } from "../componentes/TextoLido";
+import { IndicadorLeitura } from "../componentes/IndicadorLeitura";
+import { Ondas } from "../componentes/Ondas";
+import { useFala as useFalaContexto, useLerAoAbrir } from "../voz/FalaContexto";
+
+const INTRO_TITULO = "Toque no microfone e faça sua pergunta.";
+const INTRO_EXEMPLO = "Por exemplo: “Como faço um Pix?” ou “Como mando uma foto pelo WhatsApp?”";
+const INTRO_ESCREVER = "Escreva a sua pergunta.";
 
 type Etapa =
   | { tipo: "inicio"; aviso?: string }
@@ -31,6 +39,16 @@ export default function Perguntar() {
     voz.suportado ? { tipo: "inicio" } : { tipo: "digitar", aviso: "Este navegador não reconhece a fala. Escreva a sua pergunta." },
   );
   const [pergunta, setPergunta] = useState("");
+  const { falando: falandoAgora } = useFalaContexto();
+
+  // Ao abrir a tela (e ao voltar para o início dela), lê o que fazer.
+  useLerAoAbrir(
+    etapa.tipo === "inicio"
+      ? [etapa.aviso, INTRO_TITULO, INTRO_EXEMPLO].filter(Boolean).join(" ")
+      : etapa.tipo === "digitar"
+        ? [etapa.aviso, INTRO_ESCREVER].filter(Boolean).join(" ")
+        : null,
+  );
 
   /* Fim da escuta: a fala terminou sozinha (pausa) ou pelo botão "Terminei". */
   useEffect(() => {
@@ -71,13 +89,18 @@ export default function Perguntar() {
     setEtapa(voz.suportado ? { tipo: "inicio" } : { tipo: "digitar" });
   };
 
+  const estadoOndas =
+    etapa.tipo === "ouvindo" ? "ouvindo" : etapa.tipo === "pensando" ? "pensando" : falandoAgora ? "falando" : "repouso";
+
   return (
+    <>
+    <Ondas estado={estadoOndas} />
     <Tela titulo="Perguntar" voltar="/">
       {etapa.tipo === "inicio" && (
         <section className="perguntar__inicio">
-          <h2>Toque no microfone e faça sua pergunta</h2>
-          <p className="apoio">Por exemplo: “Como faço um Pix?” ou “Como mando uma foto pelo WhatsApp?”</p>
-          {etapa.aviso && <p className="aviso aviso--neutro" role="status">{etapa.aviso}</p>}
+          <TextoLido como="h2" texto={INTRO_TITULO} />
+          <TextoLido como="p" className="apoio" texto={INTRO_EXEMPLO} />
+          {etapa.aviso && <TextoLido como="p" className="aviso aviso--neutro" texto={etapa.aviso} />}
           <button className="microfone" onClick={comecarEscuta}>
             <span className="microfone__disco"><IconeMicrofone /></span>
             <span className="microfone__rotulo">Tocar e falar</span>
@@ -119,8 +142,8 @@ export default function Perguntar() {
 
       {etapa.tipo === "digitar" && (
         <section className="perguntar__digitar">
-          {etapa.aviso && <p className="aviso aviso--neutro" role="status">{etapa.aviso}</p>}
-          <label htmlFor="pergunta"><h2>Escreva a sua pergunta</h2></label>
+          {etapa.aviso && <TextoLido como="p" className="aviso aviso--neutro" texto={etapa.aviso} />}
+          <label htmlFor="pergunta"><TextoLido como="h2" texto={INTRO_ESCREVER} /></label>
           <textarea
             id="pergunta"
             className="campo"
@@ -143,15 +166,15 @@ export default function Perguntar() {
 
       {etapa.tipo === "confirmar" && (
         <section className="perguntar__confirmar">
-          <h2 className="centro">Entendi assim:</h2>
-          <p className="cartao perguntar__entendido">{pergunta}</p>
-          <h2 className="centro">Está certo?</h2>
+          <TextoLido como="h2" className="centro" texto="Entendi assim:" />
+          <TextoLido como="p" className="cartao perguntar__entendido" texto={pergunta} />
+          <TextoLido como="h2" className="centro" texto="Está certo?" />
+          <IndicadorLeitura />
           <div className="rodape">
             <button className="botao botao--confirmar" onClick={() => enviar()}>
               <IconeConfere /> Sim, está certo
             </button>
             <button className="botao botao--secundario" onClick={comecarEscuta}>Falar de novo</button>
-            <p className="apoio centro">Esta pergunta também é lida em voz alta.</p>
           </div>
         </section>
       )}
@@ -188,7 +211,8 @@ export default function Perguntar() {
       {etapa.tipo === "fora" && (
         <section className="perguntar__fora">
           <h2>Essa pergunta eu não sei responder</h2>
-          <p>{etapa.mensagem}</p>
+          <TextoLido como="p" texto={etapa.mensagem} />
+          <IndicadorLeitura />
           <div className="rodape">
             <Link className="botao" to="/licoes">Ver as lições</Link>
             <button className="botao botao--secundario" onClick={recomecar}>Perguntar outra coisa</button>
@@ -198,5 +222,6 @@ export default function Perguntar() {
 
       {etapa.tipo === "erro" && <EstadoErro tipo={etapa.erro} aoTentarDeNovo={() => enviar()} />}
     </Tela>
+    </>
   );
 }

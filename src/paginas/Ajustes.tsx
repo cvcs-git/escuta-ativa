@@ -3,11 +3,13 @@ import { Tela } from "../componentes/Tela";
 import { IconeAltoFalante, IconeConfere } from "../componentes/Icones";
 import { useFala } from "../voz/useFala";
 import { EscolhaLetra } from "./EscolhaLetra";
+import { useLerAoAbrir } from "../voz/FalaContexto";
 
 /** T7 Ajustes (wf_10) */
 export default function Ajustes() {
   const { vozLigada, velocidade, atualizar } = usePreferencias();
   const { falar, suportada } = useFala();
+  useLerAoAbrir("Ajustes. Escolha o tamanho da letra e se quer ouvir as respostas em voz.");
 
   return (
     <Tela titulo="Ajustes">

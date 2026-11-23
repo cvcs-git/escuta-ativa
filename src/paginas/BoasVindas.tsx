@@ -5,6 +5,7 @@ import { Tela } from "../componentes/Tela";
 import { IconeAltoFalante, IconeConfere } from "../componentes/Icones";
 import { useFala } from "../voz/useFala";
 import { EscolhaLetra } from "./EscolhaLetra";
+import { TextoLido } from "../componentes/TextoLido";
 
 const BOAS_VINDAS = "Olá! Eu sou o Escuta Ativa. Vou te ajudar a usar o celular com calma.";
 
@@ -26,8 +27,8 @@ export default function BoasVindas() {
   return (
     <Tela titulo="Boas-vindas" voltar={false}>
       <div className="boas-vindas__intro">
-        <h2 className="boas-vindas__ola">Olá! Eu sou o Escuta Ativa.</h2>
-        <p>Vou te ajudar a usar o celular com calma.</p>
+        <TextoLido como="h2" className="boas-vindas__ola" texto="Olá! Eu sou o Escuta Ativa." />
+        <TextoLido como="p" texto="Vou te ajudar a usar o celular com calma." />
         <button className="lendo lendo--botao" onClick={() => falar(BOAS_VINDAS, true)}>
           <IconeAltoFalante /> {falando ? "Lendo em voz alta..." : "Ouvir de novo"}
         </button>

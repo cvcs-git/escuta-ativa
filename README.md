@@ -18,7 +18,7 @@ A equipe entrevistou cinco pessoas de 61 a 89 anos. Todas relataram ao menos uma
 
 **Isso é golpe?** A pessoa cola ou dita uma mensagem recebida, e o aplicativo a classifica como provável golpe, suspeita ou sem sinais de golpe, sempre com o motivo e uma orientação prática. Antes de qualquer envio, o aplicativo detecta senhas e códigos na mensagem, bloqueia o envio e alerta o usuário.
 
-**Lições.** São tutoriais curtos, como fazer um Pix com segurança ou mandar uma foto pelo WhatsApp. O conteúdo foi revisado pela equipe e continua funcionando sem internet.
+**Lições.** São tutoriais curtos, como fazer um Pix com segurança ou mandar uma foto pelo WhatsApp. Cada passo traz uma ilustração da tela do celular, com um dedo e um círculo pulsando sobre o ponto onde tocar. O conteúdo foi revisado pela equipe e continua funcionando sem internet.
 
 **Ajustes.** A pessoa escolhe o tamanho da letra, liga ou desliga a leitura em voz e ajusta a velocidade da fala. Os ajustes ficam salvos só no aparelho, sem cadastro e sem senha.
 
@@ -40,6 +40,9 @@ As lições não usam IA, o que reduz o risco de instruções incorretas nos con
 - Contraste mínimo de 4,5:1 e ícones sempre acompanhados de texto.
 - Navegação com no máximo dois níveis e botão "Voltar" escrito por extenso.
 - Leitura em voz de todas as respostas e confirmação do texto falado antes do envio.
+- Destaque palavra por palavra do trecho que está sendo lido, para que pessoas com pouca familiaridade com a leitura acompanhem o áudio com os olhos. O botão cujo nome é falado ganha um contorno.
+- Ilustrações de tela em cada passo das lições, indicando onde tocar.
+- Botões com sombra que "afundam" ao toque, confirmando visualmente a ação.
 - Linguagem simples, sem termos em inglês.
 - Respeito à preferência do sistema por menos animação.
 

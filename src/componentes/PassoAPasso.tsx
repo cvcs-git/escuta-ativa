@@ -1,6 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { useFala } from "../voz/useFala";
-import { IconeAltoFalante, IconeAvancar, IconeRepetir } from "./Icones";
+import { IconeAvancar, IconeRepetir } from "./Icones";
+import { TextoLido } from "./TextoLido";
+import { IndicadorLeitura } from "./IndicadorLeitura";
 
 type Props = {
   passos: string[];
@@ -8,14 +10,16 @@ type Props = {
   outroJeito: (indice: number) => Promise<string> | string;
   aoConcluir: () => void;
   rotuloConcluir?: string;
+  /** Ilustração de cada passo (opcional): o "print" de onde tocar. */
+  ilustracoes?: (ReactNode | undefined)[];
 };
 
 /** Um passo por vez, lido em voz, com Repetir, Próximo e Não encontrei (wf_02 e wf_03). */
-export function PassoAPasso({ passos, outroJeito, aoConcluir, rotuloConcluir = "Concluir" }: Props) {
+export function PassoAPasso({ passos, outroJeito, aoConcluir, rotuloConcluir = "Concluir", ilustracoes }: Props) {
   const [indice, setIndice] = useState(0);
   const [alternativa, setAlternativa] = useState<string | null>(null);
   const [buscando, setBuscando] = useState(false);
-  const { falar, falando, suportada } = useFala();
+  const { falar } = useFala();
   const titulo = useRef<HTMLParagraphElement>(null);
 
   const ultimo = indice === passos.length - 1;
@@ -53,18 +57,18 @@ export function PassoAPasso({ passos, outroJeito, aoConcluir, rotuloConcluir = "
         </ol>
       </div>
 
+      {ilustracoes?.[indice] && <figure className="passos__figura">{ilustracoes[indice]}</figure>}
+
       <div className="cartao passos__cartao">
         <span className="passos__numero" aria-hidden="true">{indice + 1}</span>
-        <p className="passos__texto">{passo}</p>
-        {suportada && falando && (
-          <p className="lendo"><IconeAltoFalante /> Lendo em voz alta...</p>
-        )}
+        <TextoLido como="p" className="passos__texto" texto={passo} />
+        <IndicadorLeitura />
       </div>
 
       {alternativa && (
         <div className="passos__alternativa" role="status">
           <p className="passos__alternativa-titulo">Outro jeito de explicar</p>
-          <p>{alternativa}</p>
+          <TextoLido como="p" texto={alternativa} />
         </div>
       )}
 

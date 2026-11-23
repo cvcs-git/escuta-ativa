@@ -4,6 +4,7 @@ import licoes from "../dados/licoes.json";
 import { Tela } from "../componentes/Tela";
 import { PassoAPasso } from "../componentes/PassoAPasso";
 import { IconeConfere } from "../componentes/Icones";
+import { ILUSTRACOES } from "../componentes/Ilustracoes";
 
 /** T5 Lição (wf_03). "Não encontrei" usa o texto revisado pela equipe, sem IA. */
 export default function Licao() {
@@ -11,6 +12,7 @@ export default function Licao() {
   const licao = licoes.find((l) => l.id === id);
   const [concluida, setConcluida] = useState(false);
   const passos = useMemo(() => licao?.passos.map((p) => p.texto) ?? [], [licao]);
+  const ilustracoes = useMemo(() => passos.map((_, i) => ILUSTRACOES[`${id}-${i + 1}`]), [passos, id]);
 
   if (!licao) {
     return (
@@ -40,6 +42,7 @@ export default function Licao() {
       ) : (
         <PassoAPasso
           passos={passos}
+          ilustracoes={ilustracoes}
           outroJeito={(i) => licao.passos[i].outroJeito}
           aoConcluir={() => setConcluida(true)}
         />

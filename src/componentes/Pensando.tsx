@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AVISO_PENSANDO_MS } from "../rede/chamarIA";
 
-/** Espera da resposta. Após 5 s, avisa que ainda está trabalhando. */
+/** Espera da resposta (as ondas verdes ao fundo mostram que o app está pensando). Após 5 s, avisa que ainda está trabalhando. */
 export function Pensando({ texto = "Preparando a resposta" }: { texto?: string }) {
   const [demorando, setDemorando] = useState(false);
   useEffect(() => {
@@ -10,9 +10,6 @@ export function Pensando({ texto = "Preparando a resposta" }: { texto?: string }
   }, []);
   return (
     <section className="pensando" role="status" aria-live="polite">
-      <div className="pensando__pontos" aria-hidden="true">
-        <span /><span /><span />
-      </div>
       <h2>{demorando ? "Estou pensando..." : `${texto}...`}</h2>
       {demorando && <p className="apoio">Está demorando um pouco mais que o normal. Aguarde mais alguns segundos.</p>}
     </section>

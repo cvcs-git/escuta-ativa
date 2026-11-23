@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { HashRouter, Route, Routes, useLocation } from "react-router-dom";
 import { PreferenciasProvider } from "./contexto/Preferencias";
+import { FalaProvider, useFala } from "./voz/FalaContexto";
 import Inicio from "./paginas/Inicio";
 import BoasVindas from "./paginas/BoasVindas";
 import Perguntar from "./paginas/Perguntar";
@@ -12,10 +13,11 @@ import Ajustes from "./paginas/Ajustes";
 /** Ao trocar de tela, volta ao topo e interrompe a leitura em voz. */
 function AoTrocarDeTela() {
   const { pathname } = useLocation();
+  const { parar } = useFala();
   useEffect(() => {
     window.scrollTo(0, 0);
-    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
-  }, [pathname]);
+    parar();
+  }, [pathname, parar]);
   return null;
 }
 
@@ -26,6 +28,7 @@ function AoTrocarDeTela() {
 export function App() {
   return (
     <PreferenciasProvider>
+      <FalaProvider>
       <HashRouter>
         <AoTrocarDeTela />
         <Routes>
@@ -39,6 +42,7 @@ export function App() {
           <Route path="*" element={<Inicio />} />
         </Routes>
       </HashRouter>
+      </FalaProvider>
     </PreferenciasProvider>
   );
 }

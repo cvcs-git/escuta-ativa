@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import { Tela } from "../componentes/Tela";
 import { Pensando } from "../componentes/Pensando";
 import { EstadoErro } from "../componentes/EstadoErro";
-import { IconeAlerta, IconeAlertaContorno, IconeInfo, IconeMicrofone, IconeTelefone } from "../componentes/Icones";
+import { IconeAlerta, IconeAlertaContorno, IconeAltoFalante, IconeInfo, IconeMicrofone, IconeTelefone } from "../componentes/Icones";
 import { chamarIA } from "../rede/chamarIA";
 import { temDadoSensivel } from "../seguranca/dadosSensiveis";
 import { ErroIA, obterServicoIA, type Classificacao, type RespostaGolpe, type TipoErroIA } from "../servicos/ia";
 import { useFala } from "../voz/useFala";
 import { useReconhecimento } from "../voz/useReconhecimento";
+import { TextoLido } from "../componentes/TextoLido";
+import { IndicadorLeitura } from "../componentes/IndicadorLeitura";
+import { Ondas } from "../componentes/Ondas";
+import { useLerAoAbrir } from "../voz/FalaContexto";
 
 type Etapa =
   | { tipo: "entrada"; sensivel?: boolean }
@@ -24,12 +28,18 @@ const NIVEIS: Record<Classificacao, { titulo: string; classe: string; Icone: typ
 
 const servico = obterServicoIA();
 
+const textoDoResultado = (r: RespostaGolpe) => `${NIVEIS[r.classificacao].titulo}. ${r.motivo} ${r.orientacao}`;
+const INTRO_TITULO = "Cole ou dite a mensagem que você recebeu.";
+const INTRO_COLAR = "Para colar: toque e segure dentro do quadro e escolha “Colar”.";
+const AVISO_SENHA = "Nunca compartilhe senhas ou códigos. Esta mensagem parece ter números assim. Apague esses números e verifique de novo. Nada foi enviado nem guardado.";
+
 /** T6 Isso é golpe? (wf_04, com wf_07 em caso de erro) */
 export default function Golpe() {
   const [mensagem, setMensagem] = useState("");
   const [etapa, setEtapa] = useState<Etapa>({ tipo: "entrada" });
   const voz = useReconhecimento();
-  const { falar } = useFala();
+  const { falar, falando } = useFala();
+  useLerAoAbrir(etapa.tipo === "entrada" && !etapa.sensivel ? `${INTRO_TITULO} ${INTRO_COLAR}` : null);
 
   /* Ditado: o texto falado vai para o campo. */
   useEffect(() => {
@@ -37,16 +47,14 @@ export default function Golpe() {
   }, [voz.ouvindo, voz.texto]);
 
   useEffect(() => {
-    if (etapa.tipo !== "resultado") return;
-    const { resposta } = etapa;
-    falar(`${NIVEIS[resposta.classificacao].titulo}. ${resposta.motivo} ${resposta.orientacao}`);
+    if (etapa.tipo === "resultado") falar(textoDoResultado(etapa.resposta));
   }, [etapa, falar]);
 
   const verificar = async () => {
     // Caso de borda: senha ou código na mensagem. Nada é enviado nem guardado.
     if (temDadoSensivel(mensagem)) {
       setEtapa({ tipo: "entrada", sensivel: true });
-      falar("Atenção. Nunca compartilhe senhas ou códigos. Apague esses números e verifique de novo.", true);
+      falar(AVISO_SENHA, true);
       return;
     }
     setEtapa({ tipo: "pensando" });
@@ -64,18 +72,20 @@ export default function Golpe() {
   };
 
   return (
+    <>
+    <Ondas estado={etapa.tipo === "pensando" ? "pensando" : voz.ouvindo ? "ouvindo" : falando ? "falando" : "repouso"} />
     <Tela titulo="Isso é golpe?" voltar="/">
       {etapa.tipo === "entrada" && (
         <section className="golpe__entrada">
           <label htmlFor="mensagem">
-            <h2>Cole ou dite a mensagem que você recebeu</h2>
+            <TextoLido como="h2" texto={INTRO_TITULO} />
           </label>
-          <p className="apoio">Para colar: toque e segure dentro do quadro e escolha “Colar”.</p>
+          <TextoLido como="p" className="apoio" texto={INTRO_COLAR} />
 
           {etapa.sensivel && (
             <p className="aviso aviso--alerta" role="alert">
               <IconeAlerta />
-              <span>Nunca compartilhe senhas ou códigos. Esta mensagem parece ter números assim. Apague esses números e verifique de novo. Nada foi enviado nem guardado.</span>
+              <TextoLido texto={AVISO_SENHA} />
             </p>
           )}
 
@@ -112,11 +122,13 @@ export default function Golpe() {
 
       {etapa.tipo === "erro" && <EstadoErro tipo={etapa.erro} aoTentarDeNovo={verificar} />}
     </Tela>
+    </>
   );
 }
 
 function Resultado({ mensagem, resposta, aoVerificarOutra }: { mensagem: string; resposta: RespostaGolpe; aoVerificarOutra: () => void }) {
   const { titulo, classe, Icone } = NIVEIS[resposta.classificacao];
+  const { falar } = useFala();
   return (
     <>
       <div className="cartao">
@@ -126,13 +138,17 @@ function Resultado({ mensagem, resposta, aoVerificarOutra }: { mensagem: string;
       <section className={`resultado ${classe}`} role="alert">
         <h2 className="resultado__titulo">
           <Icone className="resultado__icone" />
-          {titulo}
+          <TextoLido texto={titulo} />
         </h2>
         <div className="resultado__corpo">
-          <p>{resposta.motivo}</p>
-          <p><strong>{resposta.orientacao}</strong></p>
+          <TextoLido como="p" texto={resposta.motivo} />
+          <TextoLido como="p" className="resultado__orientacao" texto={resposta.orientacao} />
+          <IndicadorLeitura />
         </div>
       </section>
+      <button className="botao botao--secundario" onClick={() => falar(textoDoResultado(resposta), true)}>
+        <IconeAltoFalante /> Ouvir de novo
+      </button>
       <div className="rodape">
         <a className="botao" href="tel:">
           <IconeTelefone /> Ligar para minha família
