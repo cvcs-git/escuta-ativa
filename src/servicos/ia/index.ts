@@ -1,13 +1,19 @@
-import type { ServicoIA } from "./servicoIA";
-import { criarServicoSimulado } from "./servicoIASimulado";
-
-export * from "./servicoIA";
-
 /**
- * Ponto único de troca do serviço de IA.
- * Próxima etapa: retornar o serviço do Gemini (Firebase AI Logic) quando não houver
- * ?simular=... na URL, mantendo a simulação como reserva para a apresentação.
+ * Ponto de entrada do serviço de IA.
+ *
+ * `obterServicoIA()` é o único lugar onde se escolhe a implementação. Próxima etapa:
+ * devolver o serviço do Gemini (Firebase AI Logic) e manter a simulação como reserva
+ * quando a URL tiver `?simular=...`. As telas não mudam.
  */
+import type { ServicoIA } from "./contrato";
+import { criarServicoSimulado } from "./simulado/servicoSimulado";
+
+export * from "./contrato";
+export { chamarIA, tipoDoErro, AVISO_PENSANDO_MS } from "./chamarIA";
+
+let instancia: ServicoIA | null = null;
+
 export function obterServicoIA(): ServicoIA {
-  return criarServicoSimulado();
+  instancia ??= criarServicoSimulado();
+  return instancia;
 }

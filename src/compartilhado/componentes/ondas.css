@@ -1,0 +1,87 @@
+/* Ondas sonoras em tela inteira: cada estado do assistente tem cor e movimento próprios. */
+
+.ondas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  --volume: 0;
+}
+
+.ondas__faixa {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 120px;
+  overflow: hidden;
+}
+
+.ondas__desliza {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 200%;
+  height: 100%;
+  animation: ondas-deslizar 16s linear infinite;
+}
+
+.ondas__altura {
+  transform-box: fill-box;
+  transform-origin: 50% 50%;
+  transform: scaleY(0.45);
+  transition: transform 0.5s ease;
+}
+
+.ondas path {
+  fill: none;
+  stroke: rgba(191, 54, 12, 0.24);
+  stroke-width: 3;
+  stroke-linecap: round;
+  transition: stroke 0.6s;
+}
+
+.ondas__faixa:nth-child(even) path {
+  stroke-width: 5;
+}
+
+/* Falando: laranja, um pouco mais altas. */
+.ondas[data-estado="falando"] path {
+  stroke: rgba(191, 54, 12, 0.55);
+}
+.ondas[data-estado="falando"] .ondas__altura {
+  transform: scaleY(0.55);
+}
+.ondas[data-estado="falando"] .ondas__desliza {
+  animation-duration: 7s !important;
+}
+
+/* Ouvindo: correm no sentido contrário e acompanham a voz. */
+.ondas[data-estado="ouvindo"] path {
+  stroke: rgba(191, 54, 12, 0.45);
+}
+.ondas[data-estado="ouvindo"] .ondas__altura {
+  transform: scaleY(calc(0.3 + var(--volume) * 0.3));
+  transition: transform 0.2s ease;
+}
+.ondas[data-estado="ouvindo"] .ondas__desliza {
+  animation-duration: 8s !important;
+  animation-direction: reverse;
+}
+
+/* Pensando: verdes, finas e quase paradas. */
+.ondas[data-estado="pensando"] path {
+  stroke: rgba(27, 94, 32, 0.35);
+}
+.ondas[data-estado="pensando"] .ondas__altura {
+  transform: scaleY(0.25);
+}
+.ondas[data-estado="pensando"] .ondas__desliza {
+  animation-duration: 30s !important;
+}
+
+@keyframes ondas-deslizar {
+  to {
+    transform: translateX(-50%);
+  }
+}

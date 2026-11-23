@@ -48,15 +48,15 @@ As lições não usam IA, o que reduz o risco de instruções incorretas nos con
 
 ## Tratamento de falhas
 
-| Situação | Comportamento |
-|---|---|
-| Resposta demorada | Aviso "Estou pensando..." após 5 s |
-| Sem resposta | Encerramento em 10 s, com opção de tentar de novo |
-| Serviço indisponível | Nova tentativa automática após 2 s |
-| Limite de requisições (429) | Aviso de pausa, sem nova tentativa |
-| Resposta fora do formato | Descarte e mensagem de erro |
-| Sem internet | Aviso na tela; as lições continuam disponíveis |
-| Microfone bloqueado ou sem suporte a voz | Opção de escrever a pergunta |
+| Situação                                 | Comportamento                                     |
+| ---------------------------------------- | ------------------------------------------------- |
+| Resposta demorada                        | Aviso "Estou pensando..." após 5 s                |
+| Sem resposta                             | Encerramento em 10 s, com opção de tentar de novo |
+| Serviço indisponível                     | Nova tentativa automática após 2 s                |
+| Limite de requisições (429)              | Aviso de pausa, sem nova tentativa                |
+| Resposta fora do formato                 | Descarte e mensagem de erro                       |
+| Sem internet                             | Aviso na tela; as lições continuam disponíveis    |
+| Microfone bloqueado ou sem suporte a voz | Opção de escrever a pergunta                      |
 
 Os estados de erro podem ser reproduzidos acrescentando `?simular=lento`, `timeout`, `indisponivel`, `formato` ou `limite` ao endereço das telas `#/perguntar` e `#/golpe`.
 
@@ -66,32 +66,53 @@ Os estados de erro podem ser reproduzidos acrescentando `?simular=lento`, `timeo
 - **React Router**, com rotas por hash
 - **Web Speech API** para reconhecimento de fala e leitura em voz
 - **Firebase AI Logic + Gemini** como serviço de IA, com versão simulada para desenvolvimento e demonstração
-- **Vitest** para testes automatizados
+- **Vitest** para testes automatizados, **ESLint** e **Prettier** para padronização do código
 - **CSS** com design system próprio, sem bibliotecas de componentes
 - **Vercel** para publicação
 
 ## Arquitetura
 
+O código é organizado **por funcionalidade**: cada tela tem sua pasta com a página, a lógica, os componentes e os estilos. O que é usado por várias telas fica em `compartilhado/`, e o acesso a recursos externos (IA, voz do navegador) fica em `servicos/`.
+
 ```
 src/
-├── paginas/        Telas: Boas-vindas, Início, Perguntar, Lições, Lição, Isso é golpe?, Ajustes
-├── componentes/    Estrutura de tela, passo a passo, estados de espera e erro, ícones
-├── servicos/ia/    Contrato do serviço, validação das respostas e implementações
-├── voz/            Hooks de reconhecimento de fala e leitura em voz
-├── seguranca/      Detecção de senhas e códigos antes do envio
-├── rede/           Limite de tempo, nova tentativa e estado da conexão
-├── contexto/       Preferências do usuário salvas no aparelho
-├── dados/          Conteúdo das lições
-├── estilos/        Tokens de cor, tipografia e componentes visuais
-└── testes/         Testes automatizados
+├── app/                 montagem do app: provedores, rotas e tratamento de erros inesperados
+├── funcionalidades/
+│   ├── inicio/          T2 Início: ondas sonoras e cartões de vidro
+│   ├── boas-vindas/     T1 primeiro acesso: letra e leitura em voz
+│   ├── assistente/      T3 Perguntar: máquina de estados, hook e componentes de cada etapa
+│   ├── golpe/           T6 Isso é golpe?: máquina de estados, níveis de alerta e resultado
+│   ├── licoes/          T4 e T5: conteúdo (JSON), lista, lição e ilustrações de cada passo
+│   └── ajustes/         T7: letra, leitura em voz, velocidade e escolha da voz
+├── compartilhado/
+│   ├── componentes/     Botão, Tela, PassoAPasso, TextoLido, Ondas, EstadoErro, ícones...
+│   ├── ilustracoes/     peças de desenho das telas de celular (moldura, dedo, listas, ícones)
+│   ├── preferencias/    ajustes do usuário, guardados só no aparelho
+│   ├── hooks/           estado da conexão
+│   └── utilitarios/     funções puras de texto
+├── servicos/
+│   ├── ia/              contrato, validação das respostas, regras de chamada e serviço simulado
+│   ├── voz/             leitura em voz com destaque, escolha da voz e reconhecimento de fala
+│   └── seguranca/       detecção de senhas e códigos antes do envio
+├── estilos/             tokens (cores e medidas), base, layout e componentes básicos
+└── tipos/               tipos da API de reconhecimento de fala do navegador
 ```
+
+**Decisões principais**
+
+- **Lógica separada da tela.** As telas com fluxo (Perguntar e Isso é golpe?) usam uma máquina de estados em função pura (`maquinaDoAssistente.ts`, `maquinaDoGolpe.ts`), testada isoladamente. Um hook (`useAssistente`, `useVerificacaoGolpe`) liga a máquina ao microfone, à IA e à voz, e a página só desenha a etapa atual.
+- **Contrato único para a IA.** As telas dependem apenas da interface `ServicoIA`. O serviço simulado e o Gemini são intercambiáveis em um único ponto (`servicos/ia/index.ts`).
+- **Estilos ao lado de quem os usa.** Tokens e base são globais; cada tela e cada componente importa o próprio CSS.
+- **Sem carregamento sob demanda das telas**, de propósito: depois do primeiro acesso, o app inteiro está no aparelho, e as lições abrem mesmo sem internet.
+- **Testes ao lado do código** (`*.test.ts`): validação das respostas da IA, máquinas de estados, detecção de senhas, escolha de voz e utilitários.
 
 ## Como executar
 
 ```bash
 npm install
-npm run dev
-npm test
+npm run dev      # servidor de desenvolvimento
+npm run check    # tipos, regras de código (ESLint) e testes
+npm run build    # versão de produção em dist/
 ```
 
 O reconhecimento de fala exige `localhost` ou HTTPS.

@@ -1,0 +1,95 @@
+/* Leitura em voz: destaque palavra por palavra (TextoLido) e indicador "Lendo em voz alta". */
+
+.palavra-lida {
+  background: var(--acao);
+  color: #fff;
+  border-radius: 6px;
+  padding: 0.02em 0.14em;
+  margin: 0 -0.14em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  box-shadow: 0 2px 0 var(--acao-pressionada);
+}
+
+.palavra-ja-lida {
+  text-decoration: underline;
+  text-decoration-color: #e8b9a8;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 5px;
+}
+
+/* Sobre fundos laranja, vermelho ou escuro, o destaque se inverte. */
+.botao .palavra-lida,
+.aviso--alerta .palavra-lida,
+.resultado--golpe .resultado__titulo .palavra-lida {
+  background: #fff;
+  color: var(--texto);
+  box-shadow: none;
+}
+
+.botao .palavra-ja-lida,
+.aviso--alerta .palavra-ja-lida,
+.resultado--golpe .resultado__titulo .palavra-ja-lida {
+  text-decoration-color: rgba(255, 255, 255, 0.6);
+}
+
+/* O bloco que está sendo lido ganha um contorno, para guiar o olhar. */
+.cartao:has([data-lendo]),
+.passos__alternativa:has([data-lendo]) {
+  border-color: var(--acao);
+  box-shadow: 0 0 0 3px var(--acao);
+}
+
+.botao:has([data-lendo]) {
+  outline: 5px solid var(--texto);
+  outline-offset: 4px;
+}
+
+.indicador-leitura {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--acao-pressionada);
+  font-size: 0.87rem;
+  font-weight: 700;
+}
+
+.indicador-leitura svg {
+  width: 1.3em;
+  height: 1.3em;
+}
+
+.indicador-leitura__barras {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  height: 1.1em;
+}
+
+.indicador-leitura__barras span {
+  width: 4px;
+  height: 100%;
+  border-radius: 2px;
+  background: currentColor;
+  animation: barra 0.9s ease-in-out infinite;
+}
+
+.indicador-leitura__barras span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.indicador-leitura__barras span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.indicador-leitura__barras span:nth-child(4) {
+  animation-delay: 0.45s;
+}
+
+@keyframes barra {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}

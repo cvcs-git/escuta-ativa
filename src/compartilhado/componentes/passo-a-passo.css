@@ -1,0 +1,93 @@
+/* Passo a passo: contador, trilha de progresso, ilustração, texto e explicação alternativa. */
+
+.passos__topo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.passos__contador {
+  font-weight: 700;
+  color: var(--confirmacao);
+}
+
+.passos__contador:focus {
+  outline: none;
+}
+
+.passos__trilha {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+}
+
+.passos__trilha li {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--linha);
+}
+
+.passos__trilha li.feito,
+.passos__trilha li.atual {
+  background: var(--confirmacao);
+}
+
+.passos__trilha li.atual {
+  box-shadow:
+    0 0 0 3px var(--fundo),
+    0 0 0 5px var(--confirmacao);
+}
+
+.passos__cartao {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 18px;
+  row-gap: 12px;
+  align-items: start;
+  padding: 22px 20px;
+}
+
+.passos__numero {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--confirmacao);
+  font-variant-numeric: tabular-nums;
+}
+
+.passos__texto {
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.passos__cartao .lendo {
+  grid-column: 2;
+}
+
+.passos__alternativa {
+  padding: 16px 20px;
+  border-left: 6px solid var(--confirmacao);
+  background: var(--superficie);
+  border-radius: 0 var(--raio-pequeno) var(--raio-pequeno) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.passos__alternativa-titulo {
+  font-weight: 700;
+  color: var(--confirmacao);
+  font-size: 0.87rem;
+}
+
+.passos__figura {
+  margin: 0;
+  padding: 18px 16px 14px;
+  border-radius: var(--raio);
+  background: #dedad0;
+  display: flex;
+  justify-content: center;
+}

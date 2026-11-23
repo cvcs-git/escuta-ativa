@@ -1,0 +1,15 @@
+/* Espera pela IA (Pensando) e estado de erro. */
+
+.pensando {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.estado-erro__icone {
+  width: 96px;
+  height: 96px;
+  color: var(--texto);
+  align-self: center;
+  margin: 8px 0;
+}

@@ -1,0 +1,71 @@
+/* T6 Isso é golpe?: citação e cartão de resultado. */
+
+.golpe__citacao {
+  font-size: 0.95rem;
+}
+
+.resultado {
+  border-radius: var(--raio);
+  overflow: hidden;
+  border: 3px solid;
+  background: var(--superficie);
+}
+
+.resultado__titulo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.resultado__icone {
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+
+.resultado__corpo {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.resultado--golpe {
+  border-color: var(--alerta);
+}
+
+.resultado--golpe .resultado__titulo {
+  --icone-interno: var(--alerta);
+  background: var(--alerta);
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.resultado--suspeita {
+  border-color: var(--texto);
+}
+
+.resultado--suspeita .resultado__titulo {
+  color: var(--texto);
+  border-bottom: 2px solid var(--linha);
+}
+
+.resultado--suspeita .resultado__icone {
+  color: var(--alerta);
+}
+
+.resultado--sem-sinais {
+  border-color: var(--confirmacao);
+}
+
+.resultado--sem-sinais .resultado__titulo {
+  color: var(--confirmacao);
+  border-bottom: 2px solid var(--linha);
+}
+
+.passos__cartao .indicador-leitura {
+  grid-column: 2;
+}

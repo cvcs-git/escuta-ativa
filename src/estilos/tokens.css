@@ -1,0 +1,27 @@
+/*
+ * Tokens de design do Escuta Ativa: a única fonte de cores, medidas e sombras.
+ * Paleta aprovada na pré-entrega; contraste mínimo de 4,5:1; alvos de toque de 88 px.
+ */
+
+:root {
+  --fundo: #ebe8df; /* creme: fundo */
+  --superficie: #ffffff; /* cartões e campos */
+  --texto: #212121; /* grafite: textos */
+  --texto-apoio: #4a4a4a; /* textos secundários (7,6:1 sobre o fundo) */
+  --acao: #bf360c; /* laranja: tudo que é clicável */
+  --acao-pressionada: #8f2909;
+  --confirmacao: #1b5e20; /* verde: confirmações e progresso */
+  --alerta: #d50000; /* vermelho: alerta de golpe, sempre com ícone */
+  --linha: #d6d6d6; /* cinza: separação de seções e cartões */
+  --foco: #0b57d0;
+  --sombra-acao: 0 5px 0 var(--acao-pressionada), 0 10px 20px rgba(33, 33, 33, 0.2);
+  --sombra-secundaria: 0 5px 0 #c4bdae, 0 10px 18px rgba(33, 33, 33, 0.12);
+  --sombra-confirmacao: 0 5px 0 #0e3a12, 0 10px 20px rgba(33, 33, 33, 0.2);
+
+  --toque: 88px;
+  --raio: 20px;
+  --raio-pequeno: 12px;
+  --margem: 20px;
+  --largura: 30rem;
+  --espaco-botoes: 18px; /* distância única entre botões empilhados ou lado a lado */
+}

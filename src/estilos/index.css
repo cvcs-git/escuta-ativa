@@ -1,0 +1,9 @@
+/*
+ * Estilos globais, na ordem em que se aplicam:
+ * tokens (cores e medidas) → base (elementos) → layout (estrutura das telas) → componentes básicos.
+ * Estilos de cada tela e de componentes específicos ficam ao lado deles e são importados por eles.
+ */
+@import "./tokens.css";
+@import "./base.css";
+@import "./layout.css";
+@import "./componentes.css";

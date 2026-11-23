@@ -1,0 +1,171 @@
+/* Componentes básicos: botões, cartões, campos e avisos. */
+
+/* Botões */
+
+.botao {
+  min-height: var(--toque);
+  padding: 12px 20px;
+  border-radius: var(--raio);
+  border: 3px solid var(--acao);
+  background: var(--acao);
+  color: #fff;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  width: 100%;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: var(--sombra-acao);
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
+}
+
+/* Ao tocar, o botão "afunda": a pessoa vê que o toque funcionou. */
+.botao:active {
+  transform: translateY(4px);
+  box-shadow:
+    0 1px 0 var(--acao-pressionada),
+    0 3px 6px rgba(33, 33, 33, 0.15);
+}
+
+.botao--secundario {
+  background: var(--superficie);
+  color: var(--texto);
+  box-shadow: var(--sombra-secundaria);
+}
+
+.botao--secundario:active {
+  background: #f6e3dc;
+  box-shadow: 0 1px 0 #c4bdae;
+}
+
+.botao--confirmar {
+  background: var(--confirmacao);
+  border-color: var(--confirmacao);
+  box-shadow: var(--sombra-confirmacao);
+}
+
+.botao--confirmar:active {
+  box-shadow: 0 1px 0 #0e3a12;
+}
+
+/* Desativado em tom sólido: nada do fundo aparece através do botão (contraste 4,9:1). */
+.botao:disabled {
+  background: #e7c9bd;
+  border-color: #e7c9bd;
+  color: #6b4a3e;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.botao svg {
+  flex: none;
+  width: 1.3em;
+  height: 1.3em;
+}
+
+/* Menor na tela, mas a área de toque continua com 88 px (ver ::after). */
+.botao-voltar {
+  position: relative;
+  width: auto;
+  min-height: 56px;
+  padding: 6px 16px 6px 10px;
+  gap: 6px;
+  border-width: 2px;
+  font-size: 0.8rem;
+  box-shadow:
+    0 3px 0 #c4bdae,
+    0 6px 12px rgba(33, 33, 33, 0.1);
+}
+
+.botao-voltar::after {
+  content: "";
+  position: absolute;
+  inset: -16px -10px;
+}
+
+.botao-voltar svg {
+  width: 1.1em;
+  height: 1.1em;
+}
+
+.dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-botoes);
+}
+
+/* Cartões e campos */
+
+.cartao {
+  background: var(--superficie);
+  border: 2px solid var(--linha);
+  border-radius: var(--raio);
+  padding: 18px 20px;
+}
+
+.cartao .rotulo {
+  color: var(--texto-apoio);
+  font-size: 0.87rem;
+  margin-bottom: 4px;
+}
+
+.campo {
+  width: 100%;
+  min-height: 10rem;
+  padding: 16px;
+  border: 3px solid var(--texto-apoio);
+  border-radius: var(--raio-pequeno);
+  background: var(--superficie);
+  resize: vertical;
+  line-height: 1.45;
+}
+
+.campo:focus-visible {
+  border-color: var(--foco);
+  outline-offset: 0;
+}
+
+/* Avisos */
+
+.aviso {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 16px 18px;
+  border-radius: var(--raio-pequeno);
+  font-size: 0.95rem;
+}
+
+.aviso svg {
+  flex: none;
+  width: 1.5em;
+  height: 1.5em;
+  margin-top: 0.05em;
+}
+
+.aviso--conexao {
+  background: var(--texto);
+  color: #fff;
+  margin: 0 0 20px;
+}
+
+.aviso--alerta {
+  --icone-interno: var(--alerta);
+  background: var(--alerta);
+  color: #fff;
+  font-weight: 700;
+}
+
+.aviso--neutro {
+  background: var(--superficie);
+  border: 2px solid var(--linha);
+}

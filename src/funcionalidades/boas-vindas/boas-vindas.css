@@ -1,0 +1,33 @@
+/* T1 Boas-vindas. */
+
+.boas-vindas__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.boas-vindas__ola {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.boas-vindas__ouvir {
+  align-self: flex-start;
+  min-height: 48px;
+  padding: 6px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: 0;
+  color: var(--texto-apoio);
+  font-size: 0.87rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.boas-vindas__ouvir svg {
+  width: 1.2em;
+  height: 1.2em;
+}

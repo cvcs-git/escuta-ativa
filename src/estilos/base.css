@@ -1,0 +1,67 @@
+/*
+ * Base: tipografia e comportamento padrão dos elementos.
+ * Fonte Atkinson Hyperlegible Next, desenhada pelo Braille Institute para pessoas com
+ * baixa visão (letras com formas bem distintas: I, l, 1; O, 0). A letra base (20, 23 ou
+ * 26 px) é definida em Ajustes; todas as medidas de texto usam rem.
+ */
+
+:root {
+  font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  font-size: 23px;
+  line-height: 1.5;
+  color: var(--texto);
+  background: var(--fundo);
+  -webkit-text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--fundo);
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 1.4rem;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+h2 {
+  font-size: 1.1rem;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 4px solid var(--foco);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

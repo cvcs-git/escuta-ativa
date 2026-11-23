@@ -1,0 +1,80 @@
+/* T7 Ajustes: leitura em voz, chave liga/desliga e escolha da voz. */
+
+.ajustes__voz {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-botoes);
+  padding-top: 20px;
+  border-top: 2px solid var(--linha);
+}
+
+.chave {
+  min-height: var(--toque);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 16px;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chave__trilho {
+  grid-row: span 2;
+  width: 92px;
+  height: 52px;
+  border-radius: 26px;
+  border: 3px solid var(--texto-apoio);
+  background: var(--superficie);
+  position: relative;
+  transition: background 0.2s;
+}
+
+.chave__bolinha {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--texto-apoio);
+  transition: transform 0.2s;
+}
+
+.chave__trilho.ligada {
+  background: var(--acao);
+  border-color: var(--acao);
+}
+
+.chave__trilho.ligada .chave__bolinha {
+  background: #fff;
+  transform: translateX(38px);
+}
+
+.chave__estado {
+  font-size: 0.87rem;
+  font-weight: 700;
+  color: var(--texto-apoio);
+}
+
+.ajustes__privacidade {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 2px solid var(--linha);
+}
+
+.vozes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-botoes);
+}
+
+.vozes__opcao.botao {
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 0.9rem;
+}
+
+.vozes__dica {
+  font-weight: 400;
+}

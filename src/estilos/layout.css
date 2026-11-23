@@ -1,0 +1,99 @@
+/* Estrutura comum das telas: largura, cabeçalho, conteúdo, rodapé e folha de leitura. */
+
+.tela {
+  position: relative;
+  z-index: 1;
+  max-width: var(--largura);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 var(--margem) 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cabecalho {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 2px solid var(--linha);
+  margin-bottom: 24px;
+}
+
+.cabecalho--sem-voltar {
+  grid-template-columns: 1fr;
+}
+
+.cabecalho h1 {
+  font-size: 1.15rem;
+}
+
+.conteudo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rodape {
+  margin-top: auto;
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-botoes);
+}
+
+.apoio {
+  color: var(--texto-apoio);
+  font-size: 0.87rem;
+}
+
+.conteudo > section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.centro {
+  text-align: center;
+}
+
+fieldset.escolha {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-botoes);
+}
+
+fieldset.escolha legend {
+  padding: 0;
+  margin-bottom: 14px;
+}
+
+/* Folha de leitura (Perguntar e Isso é golpe?): as ondas não cruzam o texto. */
+
+.tela--folha {
+  padding-bottom: 0;
+}
+
+.tela--folha .cabecalho {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+
+.tela--folha .conteudo {
+  margin: 8px -10px 0;
+  padding: 22px 14px 32px;
+  border-radius: 26px 26px 0 0;
+  background: rgba(250, 248, 243, 0.96);
+  box-shadow: 0 -6px 20px rgba(143, 41, 9, 0.1);
+}
+
+.tela--folha .aviso--conexao {
+  margin-top: 8px;
+  margin-bottom: 0;
+}

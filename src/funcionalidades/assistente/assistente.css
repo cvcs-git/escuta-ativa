@@ -1,0 +1,207 @@
+/* T3 Perguntar: convite para falar, escuta, confirmação e resposta. */
+
+.perguntar__inicio {
+  text-align: center;
+  align-items: center;
+}
+
+.perguntar__inicio .rodape {
+  align-self: stretch;
+}
+
+/* ---------- Escuta (wf_05): microfone pulsando enquanto ouve ---------- */
+
+.microfone-ativo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 36px auto;
+  padding: 12px;
+}
+
+.microfone-ativo__disco {
+  position: relative;
+  z-index: 1;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--acao);
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.microfone-ativo__disco svg {
+  width: 92px;
+  height: 92px;
+}
+
+.microfone-ativo__onda {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin: -100px 0 0 -100px;
+  border-radius: 50%;
+  background: var(--acao);
+  opacity: 0.25;
+  animation: microfone-onda 1.8s ease-out infinite;
+}
+
+.microfone-ativo__onda--2 {
+  animation-delay: 0.9s;
+}
+
+@keyframes microfone-onda {
+  from {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+.perguntar__transcricao {
+  font-size: 1.1rem;
+  min-height: 3em;
+}
+
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.1em;
+  margin-left: 4px;
+  vertical-align: -0.15em;
+  background: var(--texto);
+  animation: piscar 1s steps(1) infinite;
+}
+
+@keyframes piscar {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- Confirmação (wf_06) e resposta ---------- */
+
+.perguntar__confirmar h2.centro {
+  font-size: 1.2rem;
+}
+
+.perguntar__entendido {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.35;
+  padding: 24px 22px;
+}
+
+.perguntar__voce {
+  font-weight: 700;
+}
+
+/* ---------- Convite para falar: balão, círculos pulsando e dedo ---------- */
+
+.convite {
+  position: relative;
+  margin: 44px auto 12px;
+}
+
+.convite__balao {
+  position: absolute;
+  left: 50%;
+  top: -42px;
+  transform: translateX(-50%);
+  z-index: 3;
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: 12px;
+  background: var(--texto);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.convite__balao::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  margin-left: -7px;
+  border: 7px solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--texto);
+}
+
+.convite__disco {
+  position: relative;
+  width: 190px;
+  height: 190px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  cursor: pointer;
+  background: radial-gradient(circle at 34% 28%, #e0541f, var(--acao) 60%, var(--acao-pressionada));
+  box-shadow: 0 14px 28px rgba(143, 41, 9, 0.3);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.convite__disco:active {
+  transform: scale(0.97);
+}
+
+.convite__disco svg {
+  width: 64px;
+  height: 64px;
+}
+
+.convite__pulso {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid var(--acao);
+  animation: convite-pulso 1.8s ease-out infinite;
+  pointer-events: none;
+}
+
+.convite__pulso--2 {
+  animation-delay: 0.9s;
+}
+
+@keyframes convite-pulso {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.35);
+    opacity: 0;
+  }
+}
+
+.convite__dedo {
+  position: absolute;
+  right: -6px;
+  bottom: -28px;
+  width: 70px;
+  height: 90px;
+  pointer-events: none;
+  animation: convite-toque 1.8s ease-in-out infinite;
+}
+
+@keyframes convite-toque {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  40% {
+    transform: translate(-8px, -10px);
+  }
+  55% {
+    transform: translate(-8px, -10px) scale(0.94);
+  }
+}

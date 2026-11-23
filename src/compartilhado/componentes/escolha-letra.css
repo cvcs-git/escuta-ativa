@@ -1,0 +1,49 @@
+/* Escolha do tamanho da letra (T1 e T7). */
+
+.escolha__letras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.escolha__letra {
+  min-height: 112px;
+  border-radius: var(--raio);
+  border: 3px solid var(--texto-apoio);
+  background: var(--superficie);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 8px 4px;
+}
+
+.escolha__letra.ativo {
+  border-color: var(--acao);
+  background: var(--acao);
+  color: #fff;
+}
+
+.escolha__a {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.escolha__nome {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.escolha__nome svg {
+  width: 1em;
+  height: 1em;
+}
+
+.escolha__exemplo {
+  font-size: 1rem;
+}
