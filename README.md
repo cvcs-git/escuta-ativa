@@ -4,7 +4,7 @@ Aplicativo web de letramento digital para pessoas com 60 anos ou mais. Por voz e
 
 Projeto desenvolvido no módulo **RiseUp 2026.2**, da Residência em Software e IA do **Porto Digital**, no curso de Análise e Desenvolvimento de Sistemas da **Faculdade Senac Pernambuco**.
 
-**Demonstração:** _link da Vercel_
+**Demonstração:** [escuta-ativa-eta.vercel.app](https://escuta-ativa-eta.vercel.app/)
 
 ## O problema
 
