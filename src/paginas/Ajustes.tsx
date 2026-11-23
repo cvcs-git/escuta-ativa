@@ -3,11 +3,12 @@ import { Tela } from "../componentes/Tela";
 import { IconeAltoFalante, IconeConfere } from "../componentes/Icones";
 import { useFala } from "../voz/useFala";
 import { EscolhaLetra } from "./EscolhaLetra";
-import { useLerAoAbrir } from "../voz/FalaContexto";
+import { nomeDaVoz, useFala as useFalaContexto, useLerAoAbrir } from "../voz/FalaContexto";
 
 /** T7 Ajustes (wf_10) */
 export default function Ajustes() {
-  const { vozLigada, velocidade, atualizar } = usePreferencias();
+  const { vozLigada, velocidade, vozId, atualizar } = usePreferencias();
+  const { vozes, vozAtual } = useFalaContexto();
   const { falar, suportada } = useFala();
   useLerAoAbrir("Ajustes. Escolha o tamanho da letra e se quer ouvir as respostas em voz.");
 
@@ -45,7 +46,34 @@ export default function Ajustes() {
                 </button>
               ))}
             </div>
-            <button className="botao botao--secundario" onClick={() => falar("Assim fica a minha voz lendo para você.", true)}>
+            {vozes.length > 1 && (
+              <fieldset className="escolha">
+                <legend><p className="apoio">Escolha a voz</p></legend>
+                <div className="vozes">
+                  {vozes.slice(0, 6).map((v, i) => {
+                    const ativa = v.voiceURI === (vozId || vozAtual?.voiceURI);
+                    return (
+                      <button
+                        key={v.voiceURI}
+                        className={`botao ${ativa ? "" : "botao--secundario"} vozes__opcao`}
+                        aria-pressed={ativa}
+                        onClick={() => {
+                          atualizar({ vozId: v.voiceURI });
+                          window.setTimeout(() => falar("Olá! Assim fica a minha voz lendo para você.", true), 50);
+                        }}
+                      >
+                        {ativa && <IconeConfere />}
+                        <span>
+                          {nomeDaVoz(v)}
+                          {i === 0 && <span className="vozes__dica"> (mais natural)</span>}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
+            )}
+            <button className="botao botao--secundario" onClick={() => falar("Olá! Assim fica a minha voz lendo para você.", true)}>
               <IconeAltoFalante /> Ouvir um exemplo
             </button>
           </>

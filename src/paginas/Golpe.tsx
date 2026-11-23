@@ -146,10 +146,10 @@ function Resultado({ mensagem, resposta, aoVerificarOutra }: { mensagem: string;
           <IndicadorLeitura />
         </div>
       </section>
-      <button className="botao botao--secundario" onClick={() => falar(textoDoResultado(resposta), true)}>
-        <IconeAltoFalante /> Ouvir de novo
-      </button>
       <div className="rodape">
+        <button className="botao botao--secundario" onClick={() => falar(textoDoResultado(resposta), true)}>
+          <IconeAltoFalante /> Ouvir de novo
+        </button>
         <a className="botao" href="tel:">
           <IconeTelefone /> Ligar para minha família
         </a>

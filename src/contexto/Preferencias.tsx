@@ -8,9 +8,11 @@ export type Preferencias = {
   tamanhoLetra: TamanhoLetra;
   vozLigada: boolean;
   velocidade: Velocidade;
+  /** Voz escolhida em Ajustes (identificador do navegador). Vazio: o app escolhe a melhor. */
+  vozId: string;
 };
 
-const PADRAO: Preferencias = { configurado: false, tamanhoLetra: "grande", vozLigada: true, velocidade: "normal" };
+const PADRAO: Preferencias = { configurado: false, tamanhoLetra: "grande", vozLigada: true, velocidade: "normal", vozId: "" };
 const CHAVE = "escuta-ativa:preferencias";
 
 /** Tamanho base da letra, em px. O mínimo (normal) já é 20 px. */
