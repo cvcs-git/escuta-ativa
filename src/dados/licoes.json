@@ -1,0 +1,113 @@
+[
+  {
+    "id": "aumentar-letra",
+    "titulo": "Aumentar o tamanho da letra",
+    "minutos": 3,
+    "passos": [
+      {
+        "texto": "Abra as Configurações do celular. É o ícone de engrenagem.",
+        "outroJeito": "Procure entre os aplicativos um desenho de engrenagem, parecido com uma roda dentada. Toque nele uma vez."
+      },
+      {
+        "texto": "Toque em “Tela” ou “Visor”.",
+        "outroJeito": "Deslize o dedo para cima devagar até encontrar a palavra “Tela”. Em alguns celulares está escrito “Visor”."
+      },
+      {
+        "texto": "Toque em “Tamanho da fonte” e arraste a bolinha para a direita.",
+        "outroJeito": "Fonte quer dizer letra. Quanto mais para a direita você levar a bolinha, maior fica a letra."
+      }
+    ]
+  },
+  {
+    "id": "foto-whatsapp",
+    "titulo": "Mandar uma foto no WhatsApp",
+    "minutos": 4,
+    "passos": [
+      {
+        "texto": "Abra o WhatsApp e toque na conversa da pessoa.",
+        "outroJeito": "O WhatsApp é o ícone verde com um telefone. Depois, toque no nome ou na foto da pessoa."
+      },
+      {
+        "texto": "Toque no clipe de papel, ao lado do espaço para escrever.",
+        "outroJeito": "Olhe para baixo, perto de onde se digita. Em alguns celulares, em vez do clipe, há um sinal de mais."
+      },
+      {
+        "texto": "Toque em “Galeria” e escolha a foto.",
+        "outroJeito": "Galeria é onde ficam as fotos que você tirou. Toque uma vez na foto que quer mandar."
+      },
+      {
+        "texto": "Toque na seta verde para enviar.",
+        "outroJeito": "A seta fica no canto de baixo, à direita. Depois de tocar, a foto aparece na conversa."
+      }
+    ]
+  },
+  {
+    "id": "pix-seguranca",
+    "titulo": "Fazer um Pix com segurança",
+    "minutos": 5,
+    "passos": [
+      {
+        "texto": "Abra o aplicativo do seu banco.",
+        "outroJeito": "Procure o ícone com a marca do seu banco entre os aplicativos e toque nele."
+      },
+      {
+        "texto": "Toque em “Pix” na tela inicial do aplicativo.",
+        "outroJeito": "O Pix costuma ter um desenho de losango. Se não aparecer, procure no menu “Transferências”."
+      },
+      {
+        "texto": "Escolha “Pagar” ou “Transferir” e digite a chave Pix.",
+        "outroJeito": "A chave pode ser o telefone, o CPF ou o e-mail de quem vai receber. Peça a chave à pessoa."
+      },
+      {
+        "texto": "Confira o nome de quem vai receber antes de continuar.",
+        "outroJeito": "Leia o nome com calma. Se não for a pessoa que você conhece, toque em cancelar."
+      },
+      {
+        "texto": "Digite o valor, confira de novo e confirme.",
+        "outroJeito": "Olhe os números com atenção, inclusive os zeros. Só depois toque em confirmar."
+      }
+    ]
+  },
+  {
+    "id": "golpe-mensagem",
+    "titulo": "Reconhecer um golpe por mensagem",
+    "minutos": 4,
+    "passos": [
+      {
+        "texto": "Desconfie de mensagens que pedem pressa, como “urgente” ou “só hoje”.",
+        "outroJeito": "Quem aplica golpe quer que você aja sem pensar. Se a mensagem apressa você, pare e respire."
+      },
+      {
+        "texto": "Não clique em links recebidos de números que você não conhece.",
+        "outroJeito": "Link é aquele texto azul que abre uma página. Na dúvida, não toque nele."
+      },
+      {
+        "texto": "Nunca envie senhas ou códigos que chegam por mensagem.",
+        "outroJeito": "Banco e empresas sérias nunca pedem senha ou código por mensagem. Quem pede é golpista."
+      },
+      {
+        "texto": "Na dúvida, ligue para a pessoa ou para o banco pelo número que você já tem.",
+        "outroJeito": "Use o número salvo na sua agenda ou o que está atrás do cartão, e não o que veio na mensagem."
+      }
+    ]
+  },
+  {
+    "id": "chamada-video",
+    "titulo": "Fazer uma chamada de vídeo",
+    "minutos": 3,
+    "passos": [
+      {
+        "texto": "Abra o WhatsApp e toque na conversa da pessoa.",
+        "outroJeito": "O WhatsApp é o ícone verde com um telefone. Toque no nome da pessoa na lista."
+      },
+      {
+        "texto": "Toque no desenho de câmera, no alto da tela.",
+        "outroJeito": "A câmera fica no canto de cima, à direita, ao lado do desenho de telefone."
+      },
+      {
+        "texto": "Espere a pessoa atender. Para desligar, toque no botão vermelho.",
+        "outroJeito": "Segure o celular na frente do rosto. O botão vermelho fica embaixo, no meio da tela."
+      }
+    ]
+  }
+]

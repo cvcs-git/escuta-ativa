@@ -1,0 +1,616 @@
+/* ---------- Comuns às telas ---------- */
+
+.conteudo > section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.centro {
+  text-align: center;
+}
+
+fieldset.escolha {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+fieldset.escolha legend {
+  padding: 0;
+  margin-bottom: 14px;
+}
+
+/* ---------- T2 Início ---------- */
+
+.inicio__saudacao {
+  font-size: 1.4rem;
+  line-height: 1.25;
+}
+
+.inicio__opcoes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inicio__opcoes .botao {
+  justify-content: flex-start;
+  padding-left: 24px;
+  font-size: 1.1rem;
+  text-align: left;
+}
+
+/* O gesto principal do app: perguntar falando. */
+.inicio__perguntar {
+  min-height: 148px;
+  gap: 20px;
+}
+
+.inicio__mic {
+  width: 84px;
+  height: 84px;
+  flex: none;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--acao);
+  display: grid;
+  place-items: center;
+}
+
+.inicio__mic svg {
+  width: 46px;
+  height: 46px;
+}
+
+/* ---------- Escolha de letra (T1 e T7) ---------- */
+
+.escolha__letras {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.escolha__letra {
+  min-height: 112px;
+  border-radius: var(--raio);
+  border: 3px solid var(--texto-apoio);
+  background: var(--superficie);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  padding: 8px 4px;
+}
+
+.escolha__letra.ativo {
+  border-color: var(--acao);
+  background: var(--acao);
+  color: #fff;
+}
+
+.escolha__a {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.escolha__nome {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.escolha__nome svg {
+  width: 1em;
+  height: 1em;
+}
+
+.escolha__exemplo {
+  font-size: 1rem;
+}
+
+/* ---------- T1 Boas-vindas ---------- */
+
+.boas-vindas__intro {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.boas-vindas__ola {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.lendo--botao {
+  align-self: flex-start;
+  min-height: 48px;
+  padding: 6px 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---------- T7 Ajustes ---------- */
+
+.ajustes__voz {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 20px;
+  border-top: 2px solid var(--linha);
+}
+
+.chave {
+  min-height: var(--toque);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  column-gap: 16px;
+  align-items: center;
+  text-align: left;
+  cursor: pointer;
+}
+
+.chave__trilho {
+  grid-row: span 2;
+  width: 92px;
+  height: 52px;
+  border-radius: 26px;
+  border: 3px solid var(--texto-apoio);
+  background: var(--superficie);
+  position: relative;
+  transition: background 0.2s;
+}
+
+.chave__bolinha {
+  position: absolute;
+  top: 5px;
+  left: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--texto-apoio);
+  transition: transform 0.2s;
+}
+
+.chave__trilho.ligada {
+  background: var(--acao);
+  border-color: var(--acao);
+}
+
+.chave__trilho.ligada .chave__bolinha {
+  background: #fff;
+  transform: translateX(38px);
+}
+
+.chave__estado {
+  font-size: 0.87rem;
+  font-weight: 700;
+  color: var(--texto-apoio);
+}
+
+.ajustes__privacidade {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 2px solid var(--linha);
+}
+
+/* ---------- T4 Lições ---------- */
+
+.lista-licoes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.licao-item {
+  min-height: var(--toque);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: inherit;
+  text-decoration: none;
+  border-color: var(--texto-apoio);
+}
+
+.licao-item:active {
+  border-color: var(--acao);
+  background: #f6e3dc;
+}
+
+.licao-item__texto {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.licao-item__titulo {
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.licao-item__seta {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  color: var(--acao);
+}
+
+/* ---------- T5 Lição e passo a passo ---------- */
+
+.licao__titulo {
+  font-size: 1.25rem;
+}
+
+.passos__topo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.passos__contador {
+  font-weight: 700;
+  color: var(--confirmacao);
+}
+
+.passos__contador:focus {
+  outline: none;
+}
+
+.passos__trilha {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 6px;
+}
+
+.passos__trilha li {
+  flex: 1;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--linha);
+}
+
+.passos__trilha li.feito,
+.passos__trilha li.atual {
+  background: var(--confirmacao);
+}
+
+.passos__trilha li.atual {
+  box-shadow: 0 0 0 3px var(--fundo), 0 0 0 5px var(--confirmacao);
+}
+
+.passos__cartao {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 18px;
+  row-gap: 12px;
+  align-items: start;
+  padding: 22px 20px;
+}
+
+.passos__numero {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--confirmacao);
+  font-variant-numeric: tabular-nums;
+}
+
+.passos__texto {
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.passos__cartao .lendo {
+  grid-column: 2;
+}
+
+.passos__alternativa {
+  padding: 16px 20px;
+  border-left: 6px solid var(--confirmacao);
+  background: var(--superficie);
+  border-radius: 0 var(--raio-pequeno) var(--raio-pequeno) 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.passos__alternativa-titulo {
+  font-weight: 700;
+  color: var(--confirmacao);
+  font-size: 0.87rem;
+}
+
+/* ---------- Conclusão ---------- */
+
+.conclusao {
+  align-items: center;
+  text-align: center;
+  padding-top: 12px;
+}
+
+.conclusao .rodape {
+  align-self: stretch;
+}
+
+.conclusao .cartao {
+  text-align: left;
+  align-self: stretch;
+}
+
+.conclusao__selo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--confirmacao);
+  color: #fff;
+  display: grid;
+  place-items: center;
+}
+
+.conclusao__selo svg {
+  width: 64px;
+  height: 64px;
+}
+
+/* ---------- T3 Perguntar ---------- */
+
+.perguntar__inicio {
+  text-align: center;
+  align-items: center;
+}
+
+.perguntar__inicio .rodape {
+  align-self: stretch;
+}
+
+/* O microfone é o elemento central do app. */
+.microfone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  margin: 8px auto;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 24px;
+}
+
+.microfone__disco {
+  position: relative;
+  z-index: 1;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: var(--acao);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 14px #f1d5ca, 0 0 0 28px #f6e5de;
+}
+
+button.microfone:active .microfone__disco {
+  background: var(--acao-pressionada);
+}
+
+.microfone__disco svg {
+  width: 92px;
+  height: 92px;
+}
+
+.microfone__rotulo {
+  margin-top: 26px;
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--texto);
+}
+
+.microfone--ativo {
+  margin: 36px auto;
+  cursor: default;
+}
+
+.microfone--ativo .microfone__disco {
+  box-shadow: none;
+}
+
+.microfone__onda {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin: -100px 0 0 -100px;
+  border-radius: 50%;
+  background: var(--acao);
+  opacity: 0.25;
+  animation: onda 1.8s ease-out infinite;
+}
+
+.microfone__onda--2 {
+  animation-delay: 0.9s;
+}
+
+@keyframes onda {
+  from {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  to {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+.perguntar__transcricao {
+  font-size: 1.1rem;
+  min-height: 3em;
+}
+
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.1em;
+  margin-left: 4px;
+  vertical-align: -0.15em;
+  background: var(--texto);
+  animation: piscar 1s steps(1) infinite;
+}
+
+@keyframes piscar {
+  50% {
+    opacity: 0;
+  }
+}
+
+.perguntar__confirmar h2.centro {
+  font-size: 1.2rem;
+}
+
+.perguntar__entendido {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.35;
+  padding: 24px 22px;
+}
+
+.perguntar__voce {
+  font-weight: 700;
+}
+
+/* ---------- Espera e erro ---------- */
+
+.pensando {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.pensando__pontos {
+  display: flex;
+  gap: 14px;
+}
+
+.pensando__pontos span {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--confirmacao);
+  animation: pulsar 1.2s ease-in-out infinite;
+}
+
+.pensando__pontos span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.pensando__pontos span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes pulsar {
+  0%,
+  100% {
+    transform: scale(0.6);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.estado-erro__icone {
+  width: 96px;
+  height: 96px;
+  color: var(--texto);
+  align-self: center;
+  margin: 8px 0;
+}
+
+/* ---------- T6 Isso é golpe? ---------- */
+
+.golpe__citacao {
+  font-size: 0.95rem;
+}
+
+.resultado {
+  border-radius: var(--raio);
+  overflow: hidden;
+  border: 3px solid;
+  background: var(--superficie);
+}
+
+.resultado__titulo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  font-size: 1.15rem;
+  line-height: 1.25;
+}
+
+.resultado__icone {
+  flex: none;
+  width: 44px;
+  height: 44px;
+}
+
+.resultado__corpo {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.resultado--golpe {
+  border-color: var(--alerta);
+}
+
+.resultado--golpe .resultado__titulo {
+  --icone-interno: var(--alerta);
+  background: var(--alerta);
+  color: #fff;
+  letter-spacing: 0.02em;
+}
+
+.resultado--suspeita {
+  border-color: var(--texto);
+}
+
+.resultado--suspeita .resultado__titulo {
+  color: var(--texto);
+  border-bottom: 2px solid var(--linha);
+}
+
+.resultado--suspeita .resultado__icone {
+  color: var(--alerta);
+}
+
+.resultado--sem-sinais {
+  border-color: var(--confirmacao);
+}
+
+.resultado--sem-sinais .resultado__titulo {
+  color: var(--confirmacao);
+  border-bottom: 2px solid var(--linha);
+}
