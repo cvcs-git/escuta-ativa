@@ -95,7 +95,7 @@ export default function Perguntar() {
   return (
     <>
     <Ondas estado={estadoOndas} />
-    <Tela titulo="Perguntar" voltar="/">
+    <Tela titulo="Perguntar" voltar="/" folha>
       {etapa.tipo === "inicio" && (
         <section className="perguntar__inicio">
           <TextoLido como="h2" texto={INTRO_TITULO} />

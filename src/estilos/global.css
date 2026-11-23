@@ -191,8 +191,11 @@ textarea {
   box-shadow: 0 1px 0 #0e3a12;
 }
 
+/* Desativado em tom sólido: nada do fundo aparece através do botão (contraste 4,9:1). */
 .botao:disabled {
-  opacity: 0.45;
+  background: #e7c9bd;
+  border-color: #e7c9bd;
+  color: #6b4a3e;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -470,4 +473,28 @@ textarea {
 
 @keyframes ondas-deslizar {
   to { transform: translateX(-50%); }
+}
+
+/* ---------- Folha de leitura (Perguntar e Isso é golpe?) ---------- */
+
+.tela--folha {
+  padding-bottom: 0;
+}
+
+.tela--folha .cabecalho {
+  border-bottom: 0;
+  margin-bottom: 0;
+}
+
+.tela--folha .conteudo {
+  margin: 8px -10px 0;
+  padding: 22px 14px 32px;
+  border-radius: 26px 26px 0 0;
+  background: rgba(250, 248, 243, 0.96);
+  box-shadow: 0 -6px 20px rgba(143, 41, 9, 0.1);
+}
+
+.tela--folha .aviso--conexao {
+  margin-top: 8px;
+  margin-bottom: 0;
 }

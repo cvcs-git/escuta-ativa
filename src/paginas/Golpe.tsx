@@ -74,7 +74,7 @@ export default function Golpe() {
   return (
     <>
     <Ondas estado={etapa.tipo === "pensando" ? "pensando" : voz.ouvindo ? "ouvindo" : falando ? "falando" : "repouso"} />
-    <Tela titulo="Isso é golpe?" voltar="/">
+    <Tela titulo="Isso é golpe?" voltar="/" folha>
       {etapa.tipo === "entrada" && (
         <section className="golpe__entrada">
           <label htmlFor="mensagem">
