@@ -73,28 +73,42 @@
 }
 
 /* Menor na tela, mas a área de toque continua com 88 px (ver ::after). */
-.botao-voltar {
+.botao-redondo {
   position: relative;
-  width: auto;
-  min-height: 56px;
-  padding: 6px 16px 6px 10px;
-  gap: 6px;
-  border-width: 2px;
-  font-size: 0.8rem;
+  width: var(--botao-redondo);
+  height: var(--botao-redondo);
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid var(--acao);
+  background: var(--superficie);
+  color: var(--acao);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
   box-shadow:
-    0 3px 0 #c4bdae,
+    0 3px 0 var(--acao),
     0 6px 12px rgba(33, 33, 33, 0.1);
+  transition:
+    transform 0.08s,
+    box-shadow 0.08s;
 }
 
-.botao-voltar::after {
+/* Área de toque de 88 px, mesmo com o botão visualmente menor. */
+.botao-redondo::after {
   content: "";
   position: absolute;
-  inset: -16px -10px;
+  inset: -16px;
 }
 
-.botao-voltar svg {
-  width: 1.1em;
-  height: 1.1em;
+.botao-redondo:active {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--acao);
+}
+
+.botao-redondo svg {
+  width: 28px;
+  height: 28px;
 }
 
 .dupla {

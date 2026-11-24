@@ -19,6 +19,7 @@
   --sombra-confirmacao: 0 5px 0 #0e3a12, 0 10px 20px rgba(33, 33, 33, 0.2);
 
   --toque: 88px;
+  --botao-redondo: 56px; /* Voltar e Som no cabeçalho; a área de toque continua com 88 px */
   --raio: 20px;
   --raio-pequeno: 12px;
   --margem: 20px;

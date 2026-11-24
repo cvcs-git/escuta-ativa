@@ -34,9 +34,14 @@
   color: var(--texto-apoio);
 }
 
-.inicio__ouvir {
-  align-self: flex-start;
+.inicio__acoes {
   margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.inicio__ouvir {
   min-height: 56px;
   padding: 8px 18px;
   border-radius: 999px;

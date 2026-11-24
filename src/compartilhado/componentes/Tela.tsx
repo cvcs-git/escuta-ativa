@@ -1,5 +1,6 @@
 /**
- * Estrutura comum das telas: botão "Voltar" com texto, título e aviso de conexão.
+ * Estrutura comum das telas: cabeçalho simétrico (Voltar redondo, título no centro
+ * exato da tela e botão de silêncio redondo), aviso de conexão e conteúdo.
  *
  * - `voltar`: `true` volta no histórico; uma rota (ex.: "/") vai direto para ela;
  *   `false` esconde o botão (telas de primeiro nível).
@@ -10,7 +11,7 @@
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { AvisoConexao } from "./AvisoConexao";
-import { Botao } from "./Botao";
+import { BotaoSom } from "./BotaoSom";
 import { IconeVoltar } from "./Icones";
 
 type PropsTela = {
@@ -30,11 +31,12 @@ export function Tela({ titulo, voltar = true, cabecalho, folha = false, children
       {cabecalho ?? (
         <header className={voltar ? "cabecalho" : "cabecalho cabecalho--sem-voltar"}>
           {voltar && (
-            <Botao variante="secundario" className="botao-voltar" onClick={aoVoltar}>
-              <IconeVoltar /> Voltar
-            </Botao>
+            <button type="button" className="botao-redondo" aria-label="Voltar" onClick={aoVoltar}>
+              <IconeVoltar />
+            </button>
           )}
           <h1>{titulo}</h1>
+          {voltar && <BotaoSom />}
         </header>
       )}
       <AvisoConexao />

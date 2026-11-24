@@ -2,10 +2,11 @@
  * T2 Início (wf_01): ondas sonoras em tela inteira e, por cima delas, a mesma folha de
  * leitura opaca do Perguntar e do Isso é golpe?, com três cartões do mesmo tamanho.
  * "Ouvir esta tela" lê as opções, e cada cartão se destaca quando o nome dele é falado
- * (ajuda quem não lê).
+ * (ajuda quem não lê). Ao lado dele fica o botão de silêncio.
  */
 import { Link, Navigate } from "react-router-dom";
 import { BotaoLink } from "@/compartilhado/componentes/Botao";
+import { BotaoSom } from "@/compartilhado/componentes/BotaoSom";
 import {
   IconeAjustes,
   IconeAltoFalante,
@@ -55,9 +56,12 @@ export default function PaginaInicio() {
         <TextoLido texto={saudacao} />
       </h1>
       <TextoLido como="p" className="inicio__pergunta" texto={PERGUNTA} />
-      <button type="button" className="inicio__ouvir" onClick={falando ? parar : lerTela}>
-        <IconeAltoFalante /> {falando ? "Parar a leitura" : "Ouvir esta tela"}
-      </button>
+      <div className="inicio__acoes">
+        <button type="button" className="inicio__ouvir" onClick={falando ? parar : lerTela}>
+          <IconeAltoFalante /> {falando ? "Parar a leitura" : "Ouvir esta tela"}
+        </button>
+        <BotaoSom />
+      </div>
     </header>
   );
 

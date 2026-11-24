@@ -1,0 +1,41 @@
+/* Botão de silêncio (estado "mudo" em laranja cheio) e o aviso que confirma a troca. */
+
+.botao-som--mudo {
+  background: var(--acao);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--acao-pressionada);
+}
+
+.botao-som--mudo:active {
+  background: var(--acao-pressionada);
+}
+
+.aviso-som {
+  position: fixed;
+  left: 50%;
+  bottom: 28px;
+  z-index: 10;
+  transform: translate(-50%, 16px);
+  opacity: 0;
+  pointer-events: none;
+  padding: 12px 20px;
+  border-radius: 14px;
+  background: var(--texto);
+  color: #fff;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    opacity 0.25s,
+    transform 0.25s;
+}
+
+.aviso-som[data-visivel] {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aviso-som {
+    transition: none;
+  }
+}

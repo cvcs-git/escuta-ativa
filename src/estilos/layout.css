@@ -11,11 +11,12 @@
   flex-direction: column;
 }
 
+/* Laterais com a mesma largura (dois botões redondos iguais): título no centro exato. */
 .cabecalho {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: var(--botao-redondo) 1fr var(--botao-redondo);
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   padding: 16px 0;
   border-bottom: 2px solid var(--linha);
   margin-bottom: 24px;
@@ -27,6 +28,11 @@
 
 .cabecalho h1 {
   font-size: 1.15rem;
+  text-align: center;
+}
+
+.cabecalho--sem-voltar h1 {
+  text-align: left;
 }
 
 .conteudo {

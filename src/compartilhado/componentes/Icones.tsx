@@ -1,6 +1,6 @@
 /**
- * Ícones do app (SVG). Sempre aparecem acompanhados de texto, nunca sozinhos
- * (padrão de acessibilidade do projeto), por isso são marcados como decorativos.
+ * Ícones do app (SVG), marcados como decorativos. Quase sempre aparecem com texto;
+ * nos dois botões redondos do cabeçalho (Voltar e Som) o nome vai no `aria-label`.
  */
 
 type P = { className?: string };
@@ -24,6 +24,12 @@ export const IconeAltoFalante = (p: P) => (
   <svg {...base} {...p}>
     <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" />
     <path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" />
+  </svg>
+);
+export const IconeSemSom = (p: P) => (
+  <svg {...base} {...p}>
+    <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" />
+    <path d="M16 9.5l5 5M21 9.5l-5 5" />
   </svg>
 );
 export const IconeAlerta = (p: P) => (
