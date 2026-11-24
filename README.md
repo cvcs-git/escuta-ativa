@@ -20,7 +20,7 @@ A equipe entrevistou cinco pessoas de 61 a 89 anos. Todas relataram ao menos uma
 
 **Lições.** São tutoriais curtos, como fazer um Pix com segurança ou mandar uma foto pelo WhatsApp. Cada passo traz uma ilustração da tela do celular, com um dedo e um círculo pulsando sobre o ponto onde tocar. O conteúdo foi revisado pela equipe e continua funcionando sem internet.
 
-**Ajustes.** A pessoa escolhe o tamanho da letra, liga ou desliga a leitura em voz e ajusta a velocidade da fala. Os ajustes ficam salvos só no aparelho, sem cadastro e sem senha.
+**Ajustes.** A pessoa escolhe o tamanho da letra, liga ou desliga a leitura em voz, ajusta a velocidade da fala e escolhe a voz. Os ajustes ficam salvos só no aparelho, sem cadastro e sem senha. Para silenciar o aplicativo sem entrar em Ajustes, há um botão de som no topo de todas as telas.
 
 ## Uso de inteligência artificial
 
@@ -38,8 +38,9 @@ As lições não usam IA, o que reduz o risco de instruções incorretas nos con
 - Alvos de toque de no mínimo 88 px (cerca de 14 mm), conforme estudos com pessoas acima de 65 anos.
 - Letra base de 20 px, ajustável para 23 px ou 26 px.
 - Fonte [Atkinson Hyperlegible Next](https://www.brailleinstitute.org/freefont/), desenvolvida pelo Braille Institute para pessoas com baixa visão.
-- Contraste mínimo de 4,5:1 e ícones sempre acompanhados de texto.
-- Navegação com no máximo dois níveis e botão "Voltar" escrito por extenso.
+- Contraste mínimo de 4,5:1. Os ícones vêm acompanhados de texto; os únicos botões só com ícone, Voltar e Som, têm o mesmo formato, ficam sempre no mesmo lugar e trazem o nome para leitores de tela.
+- Navegação com no máximo dois níveis.
+- Botão de silêncio em todas as telas: corta a fala na hora e confirma a mudança em palavras ("Som desligado").
 - Leitura em voz de todas as respostas e confirmação do texto falado antes do envio.
 - Destaque palavra por palavra do trecho que está sendo lido, para que pessoas com pouca familiaridade com a leitura acompanhem o áudio com os olhos. O botão cujo nome é falado ganha um contorno.
 - Ilustrações de tela em cada passo das lições, indicando onde tocar.
@@ -79,15 +80,16 @@ O código é organizado **por funcionalidade**: cada tela tem sua pasta com a p�
 src/
 ├── app/                 montagem do app: provedores, rotas e tratamento de erros inesperados
 ├── funcionalidades/
-│   ├── inicio/          T2 Início: ondas sonoras e cartões de vidro
+│   ├── inicio/          T2 Início: logo, pergunta, botões de ouvir e de silêncio e as três opções
 │   ├── boas-vindas/     T1 primeiro acesso: letra e leitura em voz
 │   ├── assistente/      T3 Perguntar: máquina de estados, hook e componentes de cada etapa
 │   ├── golpe/           T6 Isso é golpe?: máquina de estados, níveis de alerta e resultado
 │   ├── licoes/          T4 e T5: conteúdo (JSON), lista, lição e ilustrações de cada passo
 │   └── ajustes/         T7: letra, leitura em voz, velocidade e escolha da voz
 ├── compartilhado/
-│   ├── componentes/     Botão, Tela, PassoAPasso, TextoLido, Ondas, EstadoErro, ícones...
+│   ├── componentes/     Botão, BotaoSom, Tela, PassoAPasso, TextoLido, Ondas, EstadoErro, ícones...
 │   ├── ilustracoes/     peças de desenho e os 13 modelos de tela usados nas respostas do assistente
+│   ├── marca/           símbolo do Escuta Ativa
 │   ├── preferencias/    ajustes do usuário, guardados só no aparelho
 │   ├── hooks/           estado da conexão
 │   └── utilitarios/     funções puras de texto

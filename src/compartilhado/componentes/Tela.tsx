@@ -3,7 +3,8 @@
  * exato da tela e botão de silêncio redondo), aviso de conexão e conteúdo.
  *
  * - `voltar`: `true` volta no histórico; uma rota (ex.: "/") vai direto para ela;
- *   `false` esconde o botão (telas de primeiro nível).
+ *   `false` esconde os botões Voltar e Som (telas de primeiro nível, que têm cabeçalho
+ *   próprio ou ainda não precisam do silêncio, como as boas-vindas).
  * - `cabecalho`: substitui o cabeçalho padrão (usado na tela inicial).
  * - `folha`: coloca o conteúdo sobre uma "folha de leitura" opaca, para as ondas do
  *   fundo não cruzarem o texto.

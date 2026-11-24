@@ -80,7 +80,7 @@
   gap: 20px;
 }
 
-.cartao-vidro {
+.cartao-opcao {
   min-height: 112px;
   padding: 14px 18px;
   display: flex;
@@ -103,14 +103,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.cartao-vidro:active {
+.cartao-opcao:active {
   transform: translateY(4px);
   box-shadow:
     0 1px 0 var(--acao),
     0 4px 8px rgba(143, 41, 9, 0.12);
 }
 
-.cartao-vidro__icone {
+.cartao-opcao__icone {
   width: 64px;
   height: 64px;
   flex: none;
@@ -121,12 +121,12 @@
   place-items: center;
 }
 
-.cartao-vidro__icone svg {
+.cartao-opcao__icone svg {
   width: 34px;
   height: 34px;
 }
 
-.cartao-vidro:has([data-lendo]) {
+.cartao-opcao:has([data-lendo]) {
   outline: 5px solid var(--texto);
   outline-offset: 4px;
 }

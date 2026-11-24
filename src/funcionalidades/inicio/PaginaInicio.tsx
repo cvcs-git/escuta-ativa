@@ -62,8 +62,8 @@ export default function PaginaInicio() {
       <Tela titulo="Escuta Ativa" voltar={false} cabecalho={cabecalho} folha>
         <nav className="inicio__opcoes" aria-label="Opções principais">
           {OPCOES.map(({ rota, rotulo, Icone }) => (
-            <Link key={rota} className="cartao-vidro" to={rota}>
-              <span className="cartao-vidro__icone">
+            <Link key={rota} className="cartao-opcao" to={rota}>
+              <span className="cartao-opcao__icone">
                 <Icone />
               </span>
               <TextoLido texto={rotulo} />
