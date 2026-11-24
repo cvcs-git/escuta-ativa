@@ -2,7 +2,8 @@
  * Conexão real com o Gemini pelo Firebase AI Logic.
  *
  * - App Check com reCAPTCHA Enterprise: só o app nos domínios cadastrados consegue
- *   chamar a IA. Tokens de uso único (proteção contra reaproveitamento).
+ *   chamar a IA. O token vale 1 hora e é reaproveitado: um token novo a cada pergunta
+ *   somava segundos de espera e estourava o limite de 10 s.
  * - Gemini Developer API (plano gratuito), com resposta em JSON no formato fixo.
  * - Em desenvolvimento (localhost), usa o token de depuração do App Check: o token
  *   aparece no console do navegador e precisa ser cadastrado no Firebase.
@@ -17,10 +18,10 @@ import type { GerarJSON } from "./servicoGemini";
 const TEMPERATURA = 0.3;
 
 /**
- * Raciocínio interno curto: as respostas são simples e o app espera no máximo 10 s.
+ * Raciocínio interno mínimo: as respostas são simples e o app espera no máximo 10 s.
  * Com o raciocínio padrão, perguntas vagas ("celular travando") passavam do limite.
  */
-const RACIOCINIO = ThinkingLevel.LOW;
+const RACIOCINIO = ThinkingLevel.MINIMAL;
 
 declare global {
   // Nome definido pelo Firebase para ligar o modo de depuração do App Check.
@@ -35,7 +36,7 @@ export function criarGeradorFirebase(): GerarJSON {
     provider: new ReCaptchaEnterpriseProvider(CHAVE_RECAPTCHA),
     isTokenAutoRefreshEnabled: true,
   });
-  const ai = getAI(app, { backend: new GoogleAIBackend(), useLimitedUseAppCheckTokens: true });
+  const ai = getAI(app, { backend: new GoogleAIBackend() });
 
   return async ({ instrucao, esquema, texto }, sinal) => {
     const modelo = getGenerativeModel(ai, {
@@ -48,7 +49,10 @@ export function criarGeradorFirebase(): GerarJSON {
         ...(esquema ? { responseJsonSchema: esquema } : {}),
       },
     });
+    const inicio = performance.now();
     const resultado = await modelo.generateContent(texto, { signal: sinal });
+    // Tempo de resposta no console (F12), para acompanhar o limite de 10 s.
+    console.info(`[Escuta Ativa] Gemini respondeu em ${Math.round(performance.now() - inicio)} ms`);
     return resultado.response.text();
   };
 }

@@ -63,7 +63,8 @@ export function criarServicoGemini(gerar: GerarJSON): ServicoIA {
     } catch (erro) {
       // O erro original fica no console do navegador (F12) para diagnóstico; a tela
       // mostra só a mensagem simples. Nenhum texto da pessoa vai para o registro.
-      console.error("[Escuta Ativa] Falha no Gemini:", erro);
+      const motivo = sinal.aborted ? "tempo de 10 s esgotado" : erro;
+      console.error("[Escuta Ativa] Falha no Gemini:", motivo);
       throw converterErro(erro);
     }
   };
