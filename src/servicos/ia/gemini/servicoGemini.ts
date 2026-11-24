@@ -60,6 +60,9 @@ export function criarServicoGemini(gerar: GerarJSON): ServicoIA {
     try {
       return lerJSON(await gerar({ ...pedido, texto: mascararDadosSensiveis(pedido.texto) }, sinal));
     } catch (erro) {
+      // O erro original fica no console do navegador (F12) para diagnóstico; a tela
+      // mostra só a mensagem simples. Nenhum texto da pessoa vai para o registro.
+      console.error("[Escuta Ativa] Falha no Gemini:", erro);
       throw converterErro(erro);
     }
   };
