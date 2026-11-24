@@ -1,0 +1,47 @@
+/**
+ * Conexão real com o Gemini pelo Firebase AI Logic.
+ *
+ * - App Check com reCAPTCHA Enterprise: só o app nos domínios cadastrados consegue
+ *   chamar a IA. Tokens de uso único (proteção contra reaproveitamento).
+ * - Gemini Developer API (plano gratuito), com resposta em JSON no formato fixo.
+ * - Em desenvolvimento (localhost), usa o token de depuração do App Check: o token
+ *   aparece no console do navegador e precisa ser cadastrado no Firebase.
+ */
+import { initializeApp } from "firebase/app";
+import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
+import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
+import { CHAVE_RECAPTCHA, CONFIG_FIREBASE, MODELO_GEMINI } from "./configuracao";
+import type { GerarJSON } from "./servicoGemini";
+
+/** Pouca criatividade: respostas estáveis e fiéis às instruções. */
+const TEMPERATURA = 0.3;
+
+declare global {
+  // Nome definido pelo Firebase para ligar o modo de depuração do App Check.
+  var FIREBASE_APPCHECK_DEBUG_TOKEN: boolean | string | undefined;
+}
+
+export function criarGeradorFirebase(): GerarJSON {
+  if (import.meta.env.DEV) globalThis.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+
+  const app = initializeApp(CONFIG_FIREBASE);
+  initializeAppCheck(app, {
+    provider: new ReCaptchaEnterpriseProvider(CHAVE_RECAPTCHA),
+    isTokenAutoRefreshEnabled: true,
+  });
+  const ai = getAI(app, { backend: new GoogleAIBackend(), useLimitedUseAppCheckTokens: true });
+
+  return async ({ instrucao, esquema, texto }, sinal) => {
+    const modelo = getGenerativeModel(ai, {
+      model: MODELO_GEMINI,
+      systemInstruction: instrucao,
+      generationConfig: {
+        temperature: TEMPERATURA,
+        responseMimeType: "application/json",
+        responseJsonSchema: esquema,
+      },
+    });
+    const resultado = await modelo.generateContent(texto, { signal: sinal });
+    return resultado.response.text();
+  };
+}
