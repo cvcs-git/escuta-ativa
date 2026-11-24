@@ -1,5 +1,5 @@
 /**
- * Um exemplo de passo ilustrado para cada um dos 13 modelos.
+ * Um exemplo de passo ilustrado para cada um dos 16 modelos.
  *
  * Vão para a IA junto com o catálogo: exemplos ensinam o formato melhor que regras.
  * O teste `instrucoes.test.ts` passa cada exemplo pela mesma validação das respostas
@@ -82,5 +82,17 @@ export const EXEMPLOS: ExemploDePasso[] = [
   {
     texto: "Aperte ao mesmo tempo o botão de ligar e o de abaixar o volume.",
     ilustracao: { modelo: "aparelho", botoes: ["ligar", "volume_menos"], juntos: true },
+  },
+  {
+    texto: "Toque em “Lanterna” para acender.",
+    ilustracao: { modelo: "atalhos", atalhos: ["Wi-Fi", "Lanterna", "Modo avião", "Bluetooth"], alvo: 1, ligar: true },
+  },
+  {
+    texto: "Toque em “Voltar”, o triângulo na parte de baixo da tela.",
+    ilustracao: { modelo: "navegacao", alvo: "voltar" },
+  },
+  {
+    texto: "Com a foto marcada, toque em “Compartilhar”.",
+    ilustracao: { modelo: "galeria", alvo: "compartilhar", foto: 0, varias: false },
   },
 ];

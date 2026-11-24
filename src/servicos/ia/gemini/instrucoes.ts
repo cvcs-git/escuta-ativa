@@ -14,10 +14,10 @@ Fale como um neto paciente: frases curtas, palavras do dia a dia, sem termos em 
 Trate a pessoa por "você". Nunca use jargão técnico. Nunca culpe a pessoa.
 Considere um celular Android comum em português. Use os nomes que aparecem na tela entre aspas curvas, por exemplo: Toque em “Configurações”.`;
 
-const { rotulo: R, apps, lista, menu, chave, botoes, campo, conversa, teclado, aparelho } = LIMITES;
+const { rotulo: R, apps, lista, menu, chave, botoes, campo, conversa, teclado, aparelho, atalhos, galeria } = LIMITES;
 
 /**
- * Catálogo dos 13 modelos de ilustração: quando usar cada um, campos e limites.
+ * Catálogo dos 16 modelos de ilustração: quando usar cada um, campos e limites.
  * Os números vêm de `LIMITES` (mesma fonte da validação), então nunca divergem.
  */
 const CATALOGO = `ILUSTRAÇÕES: cada passo pode ter uma "ilustracao": a descrição de uma tela simples que o app desenha, com um dedo apontando onde tocar. A IA não desenha; só escolhe o modelo e preenche os campos.
@@ -43,6 +43,9 @@ MODELOS (quando usar: campos):
 11. camera (tirar foto ou ler QR code ou código de barras): modo "foto"|"qrcode"|"codigo_barras", alvo "disparar"|"virar" (opcional).
 12. teclado (tocar numa tecla): texto já digitado (até ${teclado.texto}, pode ser vazio), alvo "microfone"|"apagar"|"enviar" ou uma letra de a a z, segurar true|false, opcoes [0 a ${teclado.opcoesMax} letras acentuadas que aparecem ao segurar a tecla, cada uma até ${teclado.opcao} caracteres, ex.: "á", "ã"].
 13. aparelho (botões físicos na lateral do celular): botoes [1 ou 2 de "ligar"|"volume_mais"|"volume_menos"], juntos true|false, segundos (opcional, 1 a ${aparelho.segundosMax}, para "segure por N segundos").
+14. atalhos (quadradinhos do painel que desce do alto da tela: Wi-Fi, lanterna, modo avião, Bluetooth, silencioso, girar tela, localização): atalhos [${atalhos.min} a ${atalhos.max} nomes], alvo, ligar true|false. Prefira este modelo, e não "chave" nem "gesto", para ligar ou desligar algo pelos atalhos.
+15. navegacao (botões de baixo da tela do Android): alvo "voltar"|"inicio"|"recentes". Use para voltar à tela anterior ("Voltar"), ir para a tela inicial ("Início") ou ver e fechar aplicativos abertos ("Aplicativos abertos").
+16. galeria (grade de fotos): alvo "foto" (tocar numa foto) ou "compartilhar"|"editar"|"apagar" (com a foto já selecionada), foto (posição de 0 a ${galeria.fotos - 1}, opcional), varias true|false (várias fotos selecionadas). Use para escolher, compartilhar, editar ou apagar fotos.
 
 EXEMPLOS DE PASSOS ILUSTRADOS (um por modelo):
 ${EXEMPLOS.map((exemplo) => JSON.stringify(exemplo)).join("\n")}

@@ -1,10 +1,11 @@
 /**
  * Serviço de IA simulado.
  *
- * Devolve exatamente o mesmo JSON que o Gemini devolverá, com atraso realista, e
+ * Devolve o mesmo formato de JSON que o Gemini, com atraso realista, e
  * passa pela mesma validação. Serve para desenvolver e para a demonstração.
  *
- * Para demonstrar os estados de erro, acrescente à URL:
+ * Para usar a simulação no lugar do Gemini (plano B da demonstração, se o Gemini
+ * estiver lento ou fora do ar), acrescente à URL ?simular=normal. Estados de erro:
  *   ?simular=timeout | indisponivel | formato | limite | lento
  * Exemplo: .../#/perguntar?simular=timeout
  */
@@ -21,7 +22,7 @@ import {
   TEMAS_DO_CELULAR,
 } from "./respostas";
 
-const SIMULACOES = ["timeout", "indisponivel", "formato", "limite", "lento"] as const;
+const SIMULACOES = ["normal", "timeout", "indisponivel", "formato", "limite", "lento"] as const;
 type Simulacao = (typeof SIMULACOES)[number];
 
 /** Lê `?simular=` tanto do hash (#/rota?simular=) quanto da URL normal. */

@@ -16,7 +16,7 @@ const objeto = (properties: Record<string, Esquema>, required: string[]): Esquem
 });
 
 /**
- * Assistente: sem esquema. Um esquema com os 13 modelos de ilustração passa do limite
+ * Assistente: sem esquema. Um esquema com os modelos de ilustração passa do limite
  * de complexidade do Gemini (erro 400 "too many states"). A resposta vem em modo JSON,
  * as regras de cada modelo estão nas instruções (`instrucoes.ts`) e a validação do app
  * (`validacao.ts` e `ilustracao.ts`) confere tudo; ilustração inválida é só descartada.

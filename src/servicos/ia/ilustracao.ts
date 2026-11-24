@@ -1,7 +1,7 @@
 /**
  * Ilustrações das respostas do assistente.
  *
- * A IA nunca desenha: ela escolhe um dos 13 modelos de tela e preenche os campos.
+ * A IA nunca desenha: ela escolhe um dos 16 modelos de tela e preenche os campos.
  * O app valida a descrição e desenha com as mesmas peças das lições.
  *
  * Regra de ouro: na dúvida, nenhuma imagem. Se a descrição vier fora do formato,
@@ -19,6 +19,8 @@ export type BotaoDoAparelho = "ligar" | "volume_mais" | "volume_menos";
 export type Gesto = "deslizar_baixo" | "deslizar_cima" | "segurar";
 export type AlvoChamada = "atender" | "recusar" | "mudo" | "viva_voz" | "desligar";
 export type AlvoTeclado = "microfone" | "apagar" | "enviar" | string;
+export type AlvoNavegacao = "voltar" | "inicio" | "recentes";
+export type AlvoGaleria = "foto" | "compartilhar" | "editar" | "apagar";
 
 export type EspecIlustracao =
   | { modelo: "apps"; apps: string[]; alvo: number }
@@ -33,7 +35,10 @@ export type EspecIlustracao =
   | { modelo: "chamada"; contato: string; tipo: "recebida" | "andamento"; video: boolean; alvo: AlvoChamada }
   | { modelo: "camera"; modo: "foto" | "qrcode" | "codigo_barras"; alvo?: "disparar" | "virar" }
   | { modelo: "teclado"; texto: string; alvo: AlvoTeclado; segurar: boolean; opcoes: string[] }
-  | { modelo: "aparelho"; botoes: BotaoDoAparelho[]; juntos: boolean; segundos?: number };
+  | { modelo: "aparelho"; botoes: BotaoDoAparelho[]; juntos: boolean; segundos?: number }
+  | { modelo: "atalhos"; atalhos: string[]; alvo: number; ligar: boolean }
+  | { modelo: "navegacao"; alvo: AlvoNavegacao }
+  | { modelo: "galeria"; alvo: AlvoGaleria; foto: number; varias: boolean };
 
 export type ModeloIlustracao = EspecIlustracao["modelo"];
 
@@ -58,6 +63,8 @@ export const LIMITES = {
   conversa: { baloesMax: 3, balao: 60 },
   teclado: { texto: 22, opcoesMax: 5, opcao: 2 },
   aparelho: { segundosMax: 15 },
+  atalhos: { min: 2, max: 8 },
+  galeria: { fotos: 9 },
 } as const;
 
 const R = LIMITES.rotulo;
@@ -201,9 +208,36 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
         : undefined;
     return { modelo: "aparelho", botoes, juntos: d.juntos === true && botoes.length === 2, segundos };
   },
+  atalhos(d) {
+    const atalhos = lista(d.atalhos, LIMITES.atalhos.min, LIMITES.atalhos.max, R);
+    const alvo = atalhos && indice(d.alvo, atalhos.length);
+    const ligar = d.ligar === undefined ? true : typeof d.ligar === "boolean" ? d.ligar : null;
+    return atalhos && alvo !== null && ligar !== null ? { modelo: "atalhos", atalhos, alvo, ligar } : null;
+  },
+  navegacao(d) {
+    const alvo = umDe(d.alvo, ["voltar", "inicio", "recentes"] as const);
+    return alvo ? { modelo: "navegacao", alvo } : null;
+  },
+  galeria(d) {
+    const alvo = umDe(d.alvo ?? "foto", ["foto", "compartilhar", "editar", "apagar"] as const);
+    const foto = d.foto === undefined ? 4 : indice(d.foto, LIMITES.galeria.fotos);
+    return alvo && foto !== null ? { modelo: "galeria", alvo, foto, varias: d.varias === true } : null;
+  },
 };
 
 /* ---------- Coerência com o texto do passo ---------- */
+
+/** Nomes que aparecem escritos nos desenhos de navegação e da galeria. */
+export const ROTULOS_NAVEGACAO: Record<AlvoNavegacao, string> = {
+  voltar: "Voltar",
+  inicio: "Início",
+  recentes: "Aplicativos abertos",
+};
+export const ROTULOS_GALERIA: Record<Exclude<AlvoGaleria, "foto">, string> = {
+  compartilhar: "Compartilhar",
+  editar: "Editar",
+  apagar: "Apagar",
+};
 
 /** Nome do elemento que o dedo aponta, quando o modelo tem um rótulo escrito. */
 export function rotuloDoAlvo(espec: EspecIlustracao): string | null {
@@ -219,6 +253,12 @@ export function rotuloDoAlvo(espec: EspecIlustracao): string | null {
       return espec.rotulo;
     case "campo":
       return espec.campos[espec.alvo].rotulo;
+    case "atalhos":
+      return espec.atalhos[espec.alvo];
+    case "navegacao":
+      return ROTULOS_NAVEGACAO[espec.alvo];
+    case "galeria":
+      return espec.alvo === "foto" ? null : ROTULOS_GALERIA[espec.alvo];
     default:
       return null;
   }

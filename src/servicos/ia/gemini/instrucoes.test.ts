@@ -17,10 +17,13 @@ const MODELOS: ModeloIlustracao[] = [
   "camera",
   "teclado",
   "aparelho",
+  "atalhos",
+  "navegacao",
+  "galeria",
 ];
 
 describe("documentação enviada ao Gemini", () => {
-  it("tem um exemplo para cada um dos 13 modelos", () => {
+  it("tem um exemplo para cada um dos 16 modelos", () => {
     expect(EXEMPLOS.map((e) => e.ilustracao.modelo).sort()).toEqual([...MODELOS].sort());
   });
 

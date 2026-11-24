@@ -8,15 +8,18 @@ import type { ComponentType } from "react";
 import type { EspecIlustracao, ModeloIlustracao } from "@/servicos/ia";
 import { Aparelho } from "./modelos/Aparelho";
 import { BarraDeslizante } from "./modelos/BarraDeslizante";
+import { BotoesDeNavegacao } from "./modelos/BotoesDeNavegacao";
 import { BotoesNaTela } from "./modelos/BotoesNaTela";
 import { Camera } from "./modelos/Camera";
 import { CampoParaDigitar } from "./modelos/CampoParaDigitar";
 import { Chamada } from "./modelos/Chamada";
 import { ChaveLigaDesliga } from "./modelos/ChaveLigaDesliga";
 import { Conversa } from "./modelos/Conversa";
+import { GaleriaDeFotos } from "./modelos/GaleriaDeFotos";
 import { GestoNaTela } from "./modelos/GestoNaTela";
 import { ListaDeOpcoes } from "./modelos/ListaDeOpcoes";
 import { MenuTresPontinhos } from "./modelos/MenuTresPontinhos";
+import { PainelDeAtalhos } from "./modelos/PainelDeAtalhos";
 import { TelaDeApps } from "./modelos/TelaDeApps";
 import { Teclado } from "./modelos/Teclado";
 import { Celular } from "./pecas";
@@ -37,6 +40,9 @@ const MODELOS: Record<ModeloIlustracao, ComponentType<any>> = {
   camera: Camera,
   teclado: Teclado,
   aparelho: Aparelho,
+  atalhos: PainelDeAtalhos,
+  navegacao: BotoesDeNavegacao,
+  galeria: GaleriaDeFotos,
 };
 
 type Props = {

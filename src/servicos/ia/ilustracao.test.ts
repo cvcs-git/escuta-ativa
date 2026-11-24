@@ -67,3 +67,25 @@ describe("nomes longos", () => {
     ).toBeNull();
   });
 });
+
+describe("modelos novos", () => {
+  it("painel de atalhos: aceita e confere o nome citado no passo", () => {
+    const atalhos = { modelo: "atalhos", atalhos: ["Wi-Fi", "Lanterna", "Modo avião"], alvo: 1 };
+    expect(validarIlustracao(atalhos, "Toque em “Lanterna”.")).toMatchObject({ ligar: true });
+    expect(validarIlustracao(atalhos, "Toque em “Wi-Fi”.")).toBeNull();
+    expect(validarIlustracao({ ...atalhos, atalhos: ["Wi-Fi"] }, "Toque.")).toBeNull();
+  });
+  it("navegação: só aceita voltar, início ou aplicativos abertos", () => {
+    expect(validarIlustracao({ modelo: "navegacao", alvo: "voltar" }, "Toque em “Voltar”.")).not.toBeNull();
+    expect(validarIlustracao({ modelo: "navegacao", alvo: "menu" }, "Toque.")).toBeNull();
+    expect(validarIlustracao({ modelo: "navegacao", alvo: "inicio" }, "Toque em “Voltar”.")).toBeNull();
+  });
+  it("galeria: foto entre 0 e 8 e ação conhecida", () => {
+    expect(validarIlustracao({ modelo: "galeria", alvo: "foto" }, "Toque na foto.")).toMatchObject({ foto: 4 });
+    expect(
+      validarIlustracao({ modelo: "galeria", alvo: "apagar", foto: 2, varias: true }, "Toque em “Apagar”."),
+    ).not.toBeNull();
+    expect(validarIlustracao({ modelo: "galeria", alvo: "foto", foto: 9 }, "Toque.")).toBeNull();
+    expect(validarIlustracao({ modelo: "galeria", alvo: "imprimir" }, "Toque.")).toBeNull();
+  });
+});

@@ -53,10 +53,7 @@ export function criarGeradorFirebase(): GerarJSON {
         ...(esquema ? { responseJsonSchema: esquema } : {}),
       },
     });
-    const inicio = performance.now();
     const resultado = await modelo.generateContent(texto, { signal: sinal });
-    // Tempo de resposta no console (F12), para acompanhar o limite de 15 s.
-    console.info(`[Escuta Ativa] Gemini respondeu em ${Math.round(performance.now() - inicio)} ms`);
     return resultado.response.text();
   };
 }

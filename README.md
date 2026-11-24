@@ -24,12 +24,15 @@ A equipe entrevistou cinco pessoas de 61 a 89 anos. Todas relataram ao menos uma
 
 ## Uso de inteligência artificial
 
-O modelo de linguagem atende duas tarefas, a resposta passo a passo e a classificação de golpes. Ele sempre devolve JSON em formato fixo, e o aplicativo decide como exibir cada campo. Essa separação garante quatro coisas:
+O **Gemini 3.5 Flash-Lite**, acessado pelo **Firebase AI Logic**, atende duas tarefas: a resposta passo a passo e a classificação de golpes. Ele sempre devolve JSON, e o aplicativo decide como exibir cada campo. Essa separação garante cinco coisas:
 
 - **Formato validado:** respostas fora do formato, com mais de cinco passos ou com frases longas são descartadas.
 - **Rótulos controlados pelo app:** o título, a cor e o ícone do resultado de golpe vêm do aplicativo, e não da IA. Por isso, uma mensagem nunca é apresentada como "segura".
-- **Ilustrações sem imagens geradas:** a IA não desenha. Para cada passo, ela escolhe um de 13 modelos de tela (aplicativos, lista de opções, menu, chave liga/desliga, barra, botões, campo, gesto, conversa, chamada, câmera, teclado e botões do aparelho) e preenche os textos. O app valida a descrição, inclusive se o elemento apontado pelo dedo é o mesmo citado no texto do passo, e desenha com as mesmas peças das lições. Na dúvida, o passo aparece só com o texto.
-- **Serviço trocável:** o serviço de IA segue uma interface única (`ServicoIA`). A versão simulada e a versão com o Gemini podem ser trocadas sem alterar as telas.
+- **Ilustrações sem imagens geradas:** a IA não desenha. Para cada passo, ela escolhe um de 16 modelos de tela (aplicativos, lista de opções, menu, chave liga/desliga, barra, botões, campo, gesto, conversa, chamada, câmera, teclado, botões do aparelho, painel de atalhos, botões de navegação e galeria de fotos) e preenche os textos. O app valida a descrição, inclusive se o elemento apontado pelo dedo é o mesmo citado no texto do passo, e desenha com as mesmas peças das lições; nomes longos são abreviados no desenho. Na dúvida, o passo aparece só com o texto.
+- **Documentação da IA com uma fonte só:** os limites de cada modelo e os exemplos enviados ao Gemini vêm do mesmo código que valida as respostas, e um teste confere que todo exemplo passa na validação.
+- **Serviço trocável:** o serviço de IA segue uma interface única (`ServicoIA`). O Gemini e uma versão simulada, usada em desenvolvimento e como reserva na demonstração, podem ser trocados sem alterar as telas.
+
+**Segurança e privacidade.** O app é só front-end: a chave do Gemini fica guardada no Firebase, nunca no navegador. O **App Check com reCAPTCHA Enterprise** confere, de forma invisível, que cada pedido vem do próprio app, nos domínios autorizados. Antes de qualquer envio, números longos (CPF, cartão, conta) e valores de senha ou código são trocados por "••••", e o "Isso é golpe?" bloqueia mensagens com senhas e códigos. A mensagem analisada vai separada das instruções, para a IA não obedecer a ordens escritas dentro dela.
 
 As lições não usam IA, o que reduz o risco de instruções incorretas nos conteúdos de aprendizagem.
 
@@ -60,14 +63,14 @@ As lições não usam IA, o que reduz o risco de instruções incorretas nos con
 | Sem internet                             | Aviso na tela; as lições continuam disponíveis    |
 | Microfone bloqueado ou sem suporte a voz | Opção de escrever a pergunta                      |
 
-Os estados de erro podem ser reproduzidos acrescentando `?simular=lento`, `timeout`, `indisponivel`, `formato` ou `limite` ao endereço das telas `#/perguntar` e `#/golpe`.
+Os estados de erro podem ser reproduzidos acrescentando `?simular=lento`, `timeout`, `indisponivel`, `formato` ou `limite` ao endereço das telas `#/perguntar` e `#/golpe`. Com `?simular=normal`, as telas respondem com o serviço simulado em vez do Gemini.
 
 ## Tecnologias
 
 - **React 19 + TypeScript**, com build pelo **Vite**
 - **React Router**, com rotas por hash
 - **Web Speech API** para reconhecimento de fala e leitura em voz
-- **Firebase AI Logic + Gemini** como serviço de IA, com versão simulada para desenvolvimento e demonstração
+- **Firebase AI Logic + Gemini 3.5 Flash-Lite** como serviço de IA, protegido por **App Check (reCAPTCHA Enterprise)**, com versão simulada para desenvolvimento e demonstração
 - **Vitest** para testes automatizados, **ESLint** e **Prettier** para padronização do código
 - **CSS** com design system próprio, sem bibliotecas de componentes
 - **Vercel** para publicação
@@ -88,15 +91,16 @@ src/
 │   └── ajustes/         T7: letra, leitura em voz, velocidade e escolha da voz
 ├── compartilhado/
 │   ├── componentes/     Botão, BotaoSom, Tela, PassoAPasso, TextoLido, Ondas, EstadoErro, ícones...
-│   ├── ilustracoes/     peças de desenho e os 13 modelos de tela usados nas respostas do assistente
+│   ├── ilustracoes/     peças de desenho e os 16 modelos de tela usados nas respostas do assistente
 │   ├── marca/           símbolo do Escuta Ativa
 │   ├── preferencias/    ajustes do usuário, guardados só no aparelho
 │   ├── hooks/           estado da conexão
 │   └── utilitarios/     funções puras de texto
 ├── servicos/
-│   ├── ia/              contrato, validação das respostas e das ilustrações, regras de chamada e serviço simulado
+│   ├── ia/              contrato, validação das respostas e das ilustrações, regras de chamada,
+│   │                    gemini/ (conexão, instruções, exemplos e esquemas) e simulado/
 │   ├── voz/             leitura em voz com destaque, escolha da voz e reconhecimento de fala
-│   └── seguranca/       detecção de senhas e códigos antes do envio
+│   └── seguranca/       detecção e mascaramento de senhas, códigos e documentos antes do envio
 ├── estilos/             tokens (cores e medidas), base, layout e componentes básicos
 └── tipos/               tipos da API de reconhecimento de fala do navegador
 ```
@@ -104,10 +108,10 @@ src/
 **Decisões principais**
 
 - **Lógica separada da tela.** As telas com fluxo (Perguntar e Isso é golpe?) usam uma máquina de estados em função pura (`maquinaDoAssistente.ts`, `maquinaDoGolpe.ts`), testada isoladamente. Um hook (`useAssistente`, `useVerificacaoGolpe`) liga a máquina ao microfone, à IA e à voz, e a página só desenha a etapa atual.
-- **Contrato único para a IA.** As telas dependem apenas da interface `ServicoIA`. O serviço simulado e o Gemini são intercambiáveis em um único ponto (`servicos/ia/index.ts`).
+- **Contrato único para a IA.** As telas dependem apenas da interface `ServicoIA`. O Gemini e o serviço simulado são escolhidos em um único ponto (`servicos/ia/index.ts`). A lógica do Gemini recebe a conexão como parâmetro e é testada sem rede.
 - **Estilos ao lado de quem os usa.** Tokens e base são globais; cada tela e cada componente importa o próprio CSS.
 - **Sem carregamento sob demanda das telas**, de propósito: depois do primeiro acesso, o app inteiro está no aparelho, e as lições abrem mesmo sem internet.
-- **Testes ao lado do código** (`*.test.ts`): validação das respostas e das ilustrações da IA, respostas simuladas, máquinas de estados, detecção de senhas, escolha de voz e utilitários.
+- **Testes ao lado do código** (`*.test.ts`): validação das respostas e das ilustrações da IA, documentação e pedidos enviados ao Gemini, respostas simuladas, máquinas de estados, detecção e mascaramento de dados sensíveis, escolha de voz e utilitários.
 
 ## Como executar
 
