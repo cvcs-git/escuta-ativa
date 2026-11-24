@@ -42,22 +42,25 @@ export type ModeloIlustracao = EspecIlustracao["modelo"];
 /**
  * Fonte única dos limites: a validação abaixo e o catálogo enviado à IA
  * (`gemini/instrucoes.ts`) usam estes mesmos números, então nunca divergem.
- * Textos em caracteres, contando espaços; listas em número de itens.
+ *
+ * Nomes de botões, itens, títulos e contatos aceitam até `rotulo` caracteres: o que não
+ * cabe no desenho é abreviado no fim de uma palavra ("Enviar localização…"). Listas
+ * contam itens; textos corridos (aviso, balão) são quebrados em linhas.
  */
 export const LIMITES = {
-  titulo: 24,
-  apps: { min: 2, max: 6, texto: 14 },
-  lista: { min: 2, max: 5, texto: 22 },
-  menu: { min: 2, max: 5, texto: 16 },
-  chave: { rotulo: 18, outrosMax: 3 },
-  barra: { rotulo: 24 },
-  botoes: { texto: 90, min: 1, max: 3, botao: 16 },
-  campo: { min: 1, max: 3, texto: 26, confirmar: 16 },
-  conversa: { contato: 18, baloesMax: 3, balao: 60 },
-  chamada: { contato: 18 },
+  rotulo: 40,
+  apps: { min: 2, max: 6 },
+  lista: { min: 2, max: 5 },
+  menu: { min: 2, max: 5 },
+  chave: { outrosMax: 3 },
+  botoes: { texto: 90, min: 1, max: 3 },
+  campo: { min: 1, max: 3 },
+  conversa: { baloesMax: 3, balao: 60 },
   teclado: { texto: 22, opcoesMax: 5, opcao: 2 },
   aparelho: { segundosMax: 15 },
 } as const;
+
+const R = LIMITES.rotulo;
 
 /* ---------- Leitura segura de campos ---------- */
 
@@ -81,54 +84,54 @@ type Validador = (d: Dado) => EspecIlustracao | null;
 
 const VALIDADORES: Record<ModeloIlustracao, Validador> = {
   apps(d) {
-    const apps = lista(d.apps, LIMITES.apps.min, LIMITES.apps.max, LIMITES.apps.texto);
+    const apps = lista(d.apps, LIMITES.apps.min, LIMITES.apps.max, R);
     const alvo = apps && indice(d.alvo, apps.length);
     return apps && alvo !== null ? { modelo: "apps", apps, alvo } : null;
   },
   lista(d) {
-    const titulo = texto(d.titulo, LIMITES.titulo);
-    const itens = lista(d.itens, LIMITES.lista.min, LIMITES.lista.max, LIMITES.lista.texto);
+    const titulo = texto(d.titulo, R);
+    const itens = lista(d.itens, LIMITES.lista.min, LIMITES.lista.max, R);
     const alvo = itens && indice(d.alvo, itens.length);
     return titulo && itens && alvo !== null ? { modelo: "lista", titulo, itens, alvo } : null;
   },
   menu(d) {
-    const titulo = texto(d.titulo, LIMITES.titulo);
-    const itens = lista(d.itens, LIMITES.menu.min, LIMITES.menu.max, LIMITES.menu.texto);
+    const titulo = texto(d.titulo, R);
+    const itens = lista(d.itens, LIMITES.menu.min, LIMITES.menu.max, R);
     const alvo = itens && indice(d.alvo, itens.length);
     return titulo && itens && alvo !== null ? { modelo: "menu", titulo, itens, alvo } : null;
   },
   chave(d) {
-    const titulo = texto(d.titulo, LIMITES.titulo);
-    const rotulo = texto(d.rotulo, LIMITES.chave.rotulo);
-    const outros = d.outros === undefined ? [] : lista(d.outros, 0, LIMITES.chave.outrosMax, LIMITES.chave.rotulo);
+    const titulo = texto(d.titulo, R);
+    const rotulo = texto(d.rotulo, R);
+    const outros = d.outros === undefined ? [] : lista(d.outros, 0, LIMITES.chave.outrosMax, R);
     const ligar = d.ligar === undefined ? true : typeof d.ligar === "boolean" ? d.ligar : null;
     return titulo && rotulo && outros && ligar !== null ? { modelo: "chave", titulo, rotulo, outros, ligar } : null;
   },
   barra(d) {
-    const titulo = texto(d.titulo, LIMITES.titulo);
-    const rotulo = texto(d.rotulo, LIMITES.barra.rotulo);
+    const titulo = texto(d.titulo, R);
+    const rotulo = texto(d.rotulo, R);
     const direcao = umDe(d.direcao ?? "direita", ["direita", "esquerda"] as const);
     return titulo && rotulo && direcao ? { modelo: "barra", titulo, rotulo, direcao } : null;
   },
   botoes(d) {
-    const titulo = texto(d.titulo, LIMITES.titulo);
+    const titulo = texto(d.titulo, R);
     const corpo = texto(d.texto, LIMITES.botoes.texto);
-    const botoes = lista(d.botoes, LIMITES.botoes.min, LIMITES.botoes.max, LIMITES.botoes.botao);
+    const botoes = lista(d.botoes, LIMITES.botoes.min, LIMITES.botoes.max, R);
     const alvo = botoes && indice(d.alvo, botoes.length);
     return titulo && corpo && botoes && alvo !== null ? { modelo: "botoes", titulo, texto: corpo, botoes, alvo } : null;
   },
   campo(d) {
-    const titulo = texto(d.titulo, LIMITES.titulo);
-    const { min, max, texto: limite } = LIMITES.campo;
+    const titulo = texto(d.titulo, R);
+    const { min, max } = LIMITES.campo;
     if (!Array.isArray(d.campos) || d.campos.length < min || d.campos.length > max) return null;
     const campos = d.campos.map((c) =>
-      ehObjeto(c) && texto(c.rotulo, limite) && texto(c.exemplo, limite)
+      ehObjeto(c) && texto(c.rotulo, R) && texto(c.exemplo, R)
         ? { rotulo: (c.rotulo as string).trim(), exemplo: (c.exemplo as string).trim() }
         : null,
     );
     if (!campos.every((c): c is CampoDeTexto => c !== null)) return null;
     const alvo = indice(d.alvo ?? 0, campos.length);
-    const confirmar = d.confirmar === undefined ? undefined : texto(d.confirmar, LIMITES.campo.confirmar);
+    const confirmar = d.confirmar === undefined ? undefined : texto(d.confirmar, R);
     if (!titulo || alvo === null || confirmar === null) return null;
     return { modelo: "campo", titulo, campos, alvo, confirmar };
   },
@@ -138,7 +141,7 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
     return gesto && sobre ? { modelo: "gesto", gesto, sobre } : null;
   },
   conversa(d) {
-    const contato = texto(d.contato, LIMITES.conversa.contato);
+    const contato = texto(d.contato, R);
     const brutos = d.baloes ?? [];
     if (!Array.isArray(brutos) || brutos.length > LIMITES.conversa.baloesMax) return null;
     const baloes: BalaoConversa[] = [];
@@ -163,7 +166,7 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
     return contato && alvo !== null ? { modelo: "conversa", contato, baloes, alvo, segurar } : null;
   },
   chamada(d) {
-    const contato = texto(d.contato, LIMITES.chamada.contato);
+    const contato = texto(d.contato, R);
     const tipo = umDe(d.tipo ?? "recebida", ["recebida", "andamento"] as const);
     const permitidos =
       tipo === "recebida" ? (["atender", "recusar"] as const) : (["mudo", "viva_voz", "desligar"] as const);

@@ -84,7 +84,7 @@ export function Cabecalho({ titulo, voltar = true }: { titulo: string; voltar?: 
         />
       )}
       <text x={voltar ? 44 : 30} y="61" fontSize="14" fontWeight="700" fill={GRAFITE}>
-        {titulo}
+        {curto(titulo, voltar ? 22 : 24)}
       </text>
     </g>
   );
@@ -343,6 +343,7 @@ export function BotaoNaTela({
   texto,
   cor = LARANJA,
   contorno = false,
+  recuo = 0,
 }: {
   x: number;
   y: number;
@@ -350,12 +351,14 @@ export function BotaoNaTela({
   texto: string;
   cor?: string;
   contorno?: boolean;
+  /** Espaço reservado à direita (para o dedo); o texto fica centralizado no restante. */
+  recuo?: number;
 }) {
   return (
     <g>
       <rect x={x} y={y} width={w} height="36" rx="18" fill={contorno ? "#fff" : cor} stroke={cor} strokeWidth="2" />
       <text
-        x={x + w / 2}
+        x={x + (w - recuo) / 2}
         y={y + 23}
         fontSize="12.5"
         fontWeight="700"

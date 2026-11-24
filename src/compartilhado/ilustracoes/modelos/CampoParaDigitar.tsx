@@ -37,7 +37,7 @@ export function CampoParaDigitar({ titulo, campos, alvo, confirmar }: Props) {
           </g>
         );
       })}
-      {confirmar && <BotaoNaTela x={28} y={262} w={184} texto={confirmar} cor={LARANJA} />}
+      {confirmar && <BotaoNaTela x={28} y={262} w={184} texto={curto(confirmar, 24)} cor={LARANJA} />}
       <Toque x={188} y={92 + alvo * ESPACO + 36} />
     </>
   );

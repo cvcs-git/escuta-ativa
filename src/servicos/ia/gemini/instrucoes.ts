@@ -14,7 +14,7 @@ Fale como um neto paciente: frases curtas, palavras do dia a dia, sem termos em 
 Trate a pessoa por "você". Nunca use jargão técnico. Nunca culpe a pessoa.
 Considere um celular Android comum em português. Use os nomes que aparecem na tela entre aspas curvas, por exemplo: Toque em “Configurações”.`;
 
-const { titulo: T, apps, lista, menu, chave, barra, botoes, campo, conversa, chamada, teclado, aparelho } = LIMITES;
+const { rotulo: R, apps, lista, menu, chave, botoes, campo, conversa, teclado, aparelho } = LIMITES;
 
 /**
  * Catálogo dos 13 modelos de ilustração: quando usar cada um, campos e limites.
@@ -24,22 +24,22 @@ const CATALOGO = `ILUSTRAÇÕES: cada passo pode ter uma "ilustracao": a descri�
 Mande ilustração em todo passo cuja ação um modelo consegue mostrar. Deixe sem ilustração só passos de conferir, esperar ou decidir.
 
 REGRAS QUE MAIS DERRUBAM A ILUSTRAÇÃO (o app descarta a ilustração se alguma falhar):
-- Limites de tamanho em caracteres, contando espaços. Prefira nomes curtos ("Wi-Fi", não "Conexões de Wi-Fi e rede").
+- Nomes (títulos, itens, botões, contatos) aceitam até ${R} caracteres. Use o nome que aparece no celular; se for longo, o app abrevia no desenho. Prefira o nome mais curto que a pessoa reconhece ("Wi-Fi", não "Conexões de Wi-Fi e rede").
 - "alvo" numérico é a posição na lista, começando em 0, e precisa existir na lista.
 - Se o texto do passo cita um nome entre aspas curvas, o item apontado pelo dedo precisa ter esse mesmo nome. Passo: Toque em “Tela” → o item do alvo é "Tela".
 - Use só os valores listados entre aspas para campos de escolha (ex.: gesto só aceita "deslizar_baixo", "deslizar_cima" ou "segurar").
 
 MODELOS (quando usar: campos):
-1. apps (tocar num aplicativo da tela inicial): apps [${apps.min} a ${apps.max} nomes, até ${apps.texto}], alvo.
-2. lista (tocar num item de configurações ou de uma lista): titulo (até ${T}), itens [${lista.min} a ${lista.max}, até ${lista.texto}], alvo.
-3. menu (tocar numa opção do menu dos três pontinhos): titulo (até ${T}), itens [${menu.min} a ${menu.max}, até ${menu.texto}], alvo.
-4. chave (ligar ou desligar algo): titulo (até ${T}), rotulo (até ${chave.rotulo}), outros [0 a ${chave.outrosMax} rótulos de outras chaves, até ${chave.rotulo}], ligar true|false.
-5. barra (arrastar volume, brilho, tamanho da letra): titulo (até ${T}), rotulo (até ${barra.rotulo}), direcao "direita"|"esquerda".
-6. botoes (aviso que aparece na tela pedindo confirmação): titulo (até ${T}), texto (até ${botoes.texto}), botoes [${botoes.min} a ${botoes.max}, até ${botoes.botao}], alvo.
-7. campo (formulário para digitar nome, número, mensagem): titulo (até ${T}), campos [${campo.min} a ${campo.max} de {rotulo, exemplo}, cada um até ${campo.texto}], alvo, confirmar (opcional, até ${campo.confirmar}).
+1. apps (tocar num aplicativo da tela inicial): apps [${apps.min} a ${apps.max} nomes], alvo.
+2. lista (tocar num item de configurações ou de uma lista): titulo, itens [${lista.min} a ${lista.max}], alvo.
+3. menu (tocar numa opção do menu dos três pontinhos): titulo, itens [${menu.min} a ${menu.max}], alvo.
+4. chave (ligar ou desligar algo): titulo, rotulo, outros [0 a ${chave.outrosMax} rótulos de outras chaves], ligar true|false.
+5. barra (arrastar volume, brilho, tamanho da letra): titulo, rotulo, direcao "direita"|"esquerda".
+6. botoes (aviso que aparece na tela pedindo confirmação): titulo, texto do aviso (até ${botoes.texto}), botoes [${botoes.min} a ${botoes.max}], alvo.
+7. campo (formulário para digitar nome, número, mensagem): titulo, campos [${campo.min} a ${campo.max} de {rotulo, exemplo}], alvo, confirmar (opcional).
 8. gesto (deslizar ou segurar o dedo, sem botão específico): gesto "deslizar_baixo"|"deslizar_cima"|"segurar", sobre "app"|"foto".
-9. conversa (ações dentro de uma conversa do WhatsApp ou de mensagens): contato (até ${conversa.contato}), baloes [0 a ${conversa.baloesMax} de {de "eu"|"outro", tipo "texto"|"audio", texto até ${conversa.balao} só quando tipo for "texto"}], alvo "microfone"|"clipe"|"camera"|"emoji" ou a posição de um balão, segurar true|false.
-10. chamada (atender, recusar ou controlar uma ligação): contato (até ${chamada.contato}), tipo "recebida"|"andamento", video true|false, alvo "atender"|"recusar" quando recebida ou "mudo"|"viva_voz"|"desligar" quando em andamento.
+9. conversa (ações dentro de uma conversa do WhatsApp ou de mensagens): contato, baloes [0 a ${conversa.baloesMax} de {de "eu"|"outro", tipo "texto"|"audio", texto até ${conversa.balao} só quando tipo for "texto"}], alvo "microfone"|"clipe"|"camera"|"emoji" ou a posição de um balão, segurar true|false.
+10. chamada (atender, recusar ou controlar uma ligação): contato, tipo "recebida"|"andamento", video true|false, alvo "atender"|"recusar" quando recebida ou "mudo"|"viva_voz"|"desligar" quando em andamento.
 11. camera (tirar foto ou ler QR code ou código de barras): modo "foto"|"qrcode"|"codigo_barras", alvo "disparar"|"virar" (opcional).
 12. teclado (tocar numa tecla): texto já digitado (até ${teclado.texto}, pode ser vazio), alvo "microfone"|"apagar"|"enviar" ou uma letra de a a z, segurar true|false, opcoes [0 a ${teclado.opcoesMax} letras acentuadas que aparecem ao segurar a tecla, cada uma até ${teclado.opcao} caracteres, ex.: "á", "ã"].
 13. aparelho (botões físicos na lateral do celular): botoes [1 ou 2 de "ligar"|"volume_mais"|"volume_menos"], juntos true|false, segundos (opcional, 1 a ${aparelho.segundosMax}, para "segure por N segundos").

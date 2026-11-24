@@ -22,17 +22,23 @@ export function BotoesNaTela({ titulo, texto, botoes, alvo }: Props) {
           {linha.trim()}
         </text>
       ))}
-      {botoes.map((rotulo, i) => (
-        <BotaoNaTela
-          key={rotulo + i}
-          x={xs[i]}
-          y={236}
-          w={largura}
-          texto={curto(rotulo, Math.floor(largura / 7.5))}
-          cor={LARANJA}
-          contorno={i !== alvo}
-        />
-      ))}
+      {botoes.map((rotulo, i) => {
+        // Botão único e largo: reserva a ponta direita para o dedo não cobrir o texto.
+        const recuo = botoes.length === 1 ? 34 : 0;
+        const espacoParaTexto = largura - recuo;
+        return (
+          <BotaoNaTela
+            key={rotulo + i}
+            x={xs[i]}
+            y={236}
+            w={largura}
+            texto={curto(rotulo, Math.floor(espacoParaTexto / 7.5))}
+            recuo={recuo}
+            cor={LARANJA}
+            contorno={i !== alvo}
+          />
+        );
+      })}
       <Toque x={xs[alvo] + largura - 16} y={254} />
     </>
   );

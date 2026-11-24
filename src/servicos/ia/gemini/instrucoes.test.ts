@@ -33,7 +33,7 @@ describe("documentação enviada ao Gemini", () => {
   });
 
   it("usa os mesmos limites da validação (sem números soltos divergentes)", () => {
-    expect(INSTRUCAO_ASSISTENTE).toContain("apps [2 a 6 nomes, até 14]");
-    expect(INSTRUCAO_ASSISTENTE).toContain("itens [2 a 5, até 16]");
+    expect(INSTRUCAO_ASSISTENTE).toContain("aceitam até 40 caracteres");
+    expect(INSTRUCAO_ASSISTENTE).toContain("apps [2 a 6 nomes]");
   });
 });

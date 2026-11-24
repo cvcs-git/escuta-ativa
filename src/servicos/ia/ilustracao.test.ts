@@ -16,8 +16,11 @@ describe("validarIlustracao", () => {
     expect(validarIlustracao({ ...lista, alvo: 5 }, "Toque.")).toBeNull();
   });
 
-  it("descarta textos que não cabem no desenho", () => {
-    expect(validarIlustracao({ ...lista, titulo: "Um título muito comprido para a tela" }, "Toque.")).toBeNull();
+  it("descarta textos acima de 40 caracteres (até 40, o desenho abrevia)", () => {
+    expect(validarIlustracao({ ...lista, titulo: "Um título muito comprido para a tela" }, "Toque.")).not.toBeNull();
+    expect(
+      validarIlustracao({ ...lista, titulo: "Um título comprido demais até para ser abreviado" }, "Toque."),
+    ).toBeNull();
   });
 
   it("descarta quando o dedo aponta outra coisa que não a citada no passo", () => {
@@ -46,5 +49,21 @@ describe("validarIlustracao", () => {
   it("aceita letra ou tecla especial no teclado", () => {
     expect(validarIlustracao({ modelo: "teclado", texto: "", alvo: "microfone" }, "Toque.")).not.toBeNull();
     expect(validarIlustracao({ modelo: "teclado", texto: "", alvo: "tecla mágica" }, "Toque.")).toBeNull();
+  });
+});
+
+describe("nomes longos", () => {
+  it("aceita o nome real de um botão longo (o desenho abrevia)", () => {
+    const espec = validarIlustracao(
+      { modelo: "botoes", titulo: "Localização", texto: "Compartilhar", botoes: ["Enviar localização atual"], alvo: 0 },
+      "Toque em “Enviar localização atual”.",
+    );
+    expect(espec).not.toBeNull();
+  });
+  it("recusa nomes com mais de 40 caracteres", () => {
+    const longo = "Um nome de botão muito comprido que não serve";
+    expect(
+      validarIlustracao({ modelo: "botoes", titulo: "T", texto: "x", botoes: [longo], alvo: 0 }, "Toque."),
+    ).toBeNull();
   });
 });
