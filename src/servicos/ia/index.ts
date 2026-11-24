@@ -36,3 +36,11 @@ const servico: ServicoIA = {
 export function obterServicoIA(): ServicoIA {
   return servico;
 }
+
+/**
+ * Prepara a conexão com o Gemini (Firebase, reCAPTCHA e token do App Check) antes da
+ * primeira pergunta. As telas Perguntar e Isso é golpe? chamam ao abrir.
+ */
+export function prepararServicoIA() {
+  escolherServico();
+}

@@ -4,7 +4,7 @@
  */
 import { useCallback, useEffect, useReducer } from "react";
 import type { EstadoOndas } from "@/compartilhado/componentes/Ondas";
-import { chamarIA, obterServicoIA, tipoDoErro } from "@/servicos/ia";
+import { chamarIA, obterServicoIA, prepararServicoIA, tipoDoErro } from "@/servicos/ia";
 import { temDadoSensivel } from "@/servicos/seguranca/dadosSensiveis";
 import { useFala } from "@/servicos/voz/FalaProvider";
 import { useLerAoAbrir } from "@/servicos/voz/useLerAoAbrir";
@@ -17,6 +17,9 @@ export function useVerificacaoGolpe() {
   const [{ etapa, mensagem }, despachar] = useReducer(maquinaDoGolpe, ESTADO_INICIAL);
   const ditado = useReconhecimento();
   const { falar, falando } = useFala();
+
+  /* Prepara a conexão com a IA enquanto a pessoa ainda está colando ou ditando. */
+  useEffect(() => prepararServicoIA(), []);
 
   useLerAoAbrir(etapa.tipo === "entrada" && !etapa.temSenha ? `${TEXTOS.instrucao} ${TEXTOS.comoColar}` : null);
 

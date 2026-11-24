@@ -3,7 +3,7 @@
  * A tela (PaginaPerguntar) só desenha a etapa atual e chama as ações daqui.
  */
 import { useCallback, useEffect, useReducer } from "react";
-import { chamarIA, obterServicoIA, tipoDoErro } from "@/servicos/ia";
+import { chamarIA, obterServicoIA, prepararServicoIA, tipoDoErro } from "@/servicos/ia";
 import { useFala } from "@/servicos/voz/FalaProvider";
 import { useLerAoAbrir } from "@/servicos/voz/useLerAoAbrir";
 import { useReconhecimento } from "@/servicos/voz/useReconhecimento";
@@ -15,6 +15,9 @@ export function useAssistente() {
   const voz = useReconhecimento();
   const { falar, falando } = useFala();
   const [{ etapa, pergunta }, despachar] = useReducer(maquinaDoAssistente, voz.suportado, estadoInicial);
+
+  /* Prepara a conexão com a IA enquanto a pessoa ainda está falando ou escrevendo. */
+  useEffect(() => prepararServicoIA(), []);
 
   /* Fim da escuta: a fala terminou sozinha (pausa) ou pelo botão "Terminei". */
   useEffect(() => {

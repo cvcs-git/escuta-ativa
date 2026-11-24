@@ -9,7 +9,7 @@
  *   aparece no console do navegador e precisa ser cadastrado no Firebase.
  */
 import { initializeApp } from "firebase/app";
-import { initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
+import { getToken, initializeAppCheck, ReCaptchaEnterpriseProvider } from "firebase/app-check";
 import { getAI, getGenerativeModel, GoogleAIBackend, ThinkingLevel } from "firebase/ai";
 import { CHAVE_RECAPTCHA, CONFIG_FIREBASE, MODELO_GEMINI } from "./configuracao";
 import type { GerarJSON } from "./servicoGemini";
@@ -32,10 +32,14 @@ export function criarGeradorFirebase(): GerarJSON {
   if (import.meta.env.DEV) globalThis.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 
   const app = initializeApp(CONFIG_FIREBASE);
-  initializeAppCheck(app, {
+  const appCheck = initializeAppCheck(app, {
     provider: new ReCaptchaEnterpriseProvider(CHAVE_RECAPTCHA),
     isTokenAutoRefreshEnabled: true,
   });
+  // Aquecimento: carrega o reCAPTCHA e obtém o token já ao abrir a tela, enquanto a
+  // pessoa digita ou fala. Sem isso, a primeira pergunta pagava esse tempo e podia
+  // passar dos 10 s. Uma falha aqui não importa: o token é pedido de novo na pergunta.
+  void getToken(appCheck).catch(() => undefined);
   const ai = getAI(app, { backend: new GoogleAIBackend() });
 
   return async ({ instrucao, esquema, texto }, sinal) => {
