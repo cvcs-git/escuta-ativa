@@ -39,7 +39,25 @@ export type ModeloIlustracao = EspecIlustracao["modelo"];
 
 /* ---------- Limites (para o texto caber no desenho) ---------- */
 
-const LIMITE = { titulo: 24, item: 22, app: 14, texto: 90, contato: 18, botao: 16, exemplo: 26 } as const;
+/**
+ * Fonte única dos limites: a validação abaixo e o catálogo enviado à IA
+ * (`gemini/instrucoes.ts`) usam estes mesmos números, então nunca divergem.
+ * Textos em caracteres, contando espaços; listas em número de itens.
+ */
+export const LIMITES = {
+  titulo: 24,
+  apps: { min: 2, max: 6, texto: 14 },
+  lista: { min: 2, max: 5, texto: 22 },
+  menu: { min: 2, max: 5, texto: 16 },
+  chave: { rotulo: 18, outrosMax: 3 },
+  barra: { rotulo: 24 },
+  botoes: { texto: 90, min: 1, max: 3, botao: 16 },
+  campo: { min: 1, max: 3, texto: 26, confirmar: 16 },
+  conversa: { contato: 18, baloesMax: 3, balao: 60 },
+  chamada: { contato: 18 },
+  teclado: { texto: 22, opcoesMax: 5, opcao: 2 },
+  aparelho: { segundosMax: 15 },
+} as const;
 
 /* ---------- Leitura segura de campos ---------- */
 
@@ -63,53 +81,54 @@ type Validador = (d: Dado) => EspecIlustracao | null;
 
 const VALIDADORES: Record<ModeloIlustracao, Validador> = {
   apps(d) {
-    const apps = lista(d.apps, 2, 6, LIMITE.app);
+    const apps = lista(d.apps, LIMITES.apps.min, LIMITES.apps.max, LIMITES.apps.texto);
     const alvo = apps && indice(d.alvo, apps.length);
     return apps && alvo !== null ? { modelo: "apps", apps, alvo } : null;
   },
   lista(d) {
-    const titulo = texto(d.titulo, LIMITE.titulo);
-    const itens = lista(d.itens, 2, 5, LIMITE.item);
+    const titulo = texto(d.titulo, LIMITES.titulo);
+    const itens = lista(d.itens, LIMITES.lista.min, LIMITES.lista.max, LIMITES.lista.texto);
     const alvo = itens && indice(d.alvo, itens.length);
     return titulo && itens && alvo !== null ? { modelo: "lista", titulo, itens, alvo } : null;
   },
   menu(d) {
-    const titulo = texto(d.titulo, LIMITE.titulo);
-    const itens = lista(d.itens, 2, 5, 16);
+    const titulo = texto(d.titulo, LIMITES.titulo);
+    const itens = lista(d.itens, LIMITES.menu.min, LIMITES.menu.max, LIMITES.menu.texto);
     const alvo = itens && indice(d.alvo, itens.length);
     return titulo && itens && alvo !== null ? { modelo: "menu", titulo, itens, alvo } : null;
   },
   chave(d) {
-    const titulo = texto(d.titulo, LIMITE.titulo);
-    const rotulo = texto(d.rotulo, 18);
-    const outros = d.outros === undefined ? [] : lista(d.outros, 0, 3, 18);
+    const titulo = texto(d.titulo, LIMITES.titulo);
+    const rotulo = texto(d.rotulo, LIMITES.chave.rotulo);
+    const outros = d.outros === undefined ? [] : lista(d.outros, 0, LIMITES.chave.outrosMax, LIMITES.chave.rotulo);
     const ligar = d.ligar === undefined ? true : typeof d.ligar === "boolean" ? d.ligar : null;
     return titulo && rotulo && outros && ligar !== null ? { modelo: "chave", titulo, rotulo, outros, ligar } : null;
   },
   barra(d) {
-    const titulo = texto(d.titulo, LIMITE.titulo);
-    const rotulo = texto(d.rotulo, LIMITE.titulo);
+    const titulo = texto(d.titulo, LIMITES.titulo);
+    const rotulo = texto(d.rotulo, LIMITES.barra.rotulo);
     const direcao = umDe(d.direcao ?? "direita", ["direita", "esquerda"] as const);
     return titulo && rotulo && direcao ? { modelo: "barra", titulo, rotulo, direcao } : null;
   },
   botoes(d) {
-    const titulo = texto(d.titulo, LIMITE.titulo);
-    const corpo = texto(d.texto, LIMITE.texto);
-    const botoes = lista(d.botoes, 1, 3, LIMITE.botao);
+    const titulo = texto(d.titulo, LIMITES.titulo);
+    const corpo = texto(d.texto, LIMITES.botoes.texto);
+    const botoes = lista(d.botoes, LIMITES.botoes.min, LIMITES.botoes.max, LIMITES.botoes.botao);
     const alvo = botoes && indice(d.alvo, botoes.length);
     return titulo && corpo && botoes && alvo !== null ? { modelo: "botoes", titulo, texto: corpo, botoes, alvo } : null;
   },
   campo(d) {
-    const titulo = texto(d.titulo, LIMITE.titulo);
-    if (!Array.isArray(d.campos) || d.campos.length < 1 || d.campos.length > 3) return null;
+    const titulo = texto(d.titulo, LIMITES.titulo);
+    const { min, max, texto: limite } = LIMITES.campo;
+    if (!Array.isArray(d.campos) || d.campos.length < min || d.campos.length > max) return null;
     const campos = d.campos.map((c) =>
-      ehObjeto(c) && texto(c.rotulo, LIMITE.exemplo) && texto(c.exemplo, LIMITE.exemplo)
+      ehObjeto(c) && texto(c.rotulo, limite) && texto(c.exemplo, limite)
         ? { rotulo: (c.rotulo as string).trim(), exemplo: (c.exemplo as string).trim() }
         : null,
     );
     if (!campos.every((c): c is CampoDeTexto => c !== null)) return null;
     const alvo = indice(d.alvo ?? 0, campos.length);
-    const confirmar = d.confirmar === undefined ? undefined : texto(d.confirmar, LIMITE.botao);
+    const confirmar = d.confirmar === undefined ? undefined : texto(d.confirmar, LIMITES.campo.confirmar);
     if (!titulo || alvo === null || confirmar === null) return null;
     return { modelo: "campo", titulo, campos, alvo, confirmar };
   },
@@ -119,9 +138,9 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
     return gesto && sobre ? { modelo: "gesto", gesto, sobre } : null;
   },
   conversa(d) {
-    const contato = texto(d.contato, LIMITE.contato);
+    const contato = texto(d.contato, LIMITES.conversa.contato);
     const brutos = d.baloes ?? [];
-    if (!Array.isArray(brutos) || brutos.length > 3) return null;
+    if (!Array.isArray(brutos) || brutos.length > LIMITES.conversa.baloesMax) return null;
     const baloes: BalaoConversa[] = [];
     for (const b of brutos) {
       if (!ehObjeto(b)) return null;
@@ -132,7 +151,7 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
         baloes.push({ de, tipo });
         continue;
       }
-      const conteudo = texto(b.texto, 60);
+      const conteudo = texto(b.texto, LIMITES.conversa.balao);
       if (!conteudo) return null;
       baloes.push({ de, tipo, texto: conteudo });
     }
@@ -144,7 +163,7 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
     return contato && alvo !== null ? { modelo: "conversa", contato, baloes, alvo, segurar } : null;
   },
   chamada(d) {
-    const contato = texto(d.contato, LIMITE.contato);
+    const contato = texto(d.contato, LIMITES.chamada.contato);
     const tipo = umDe(d.tipo ?? "recebida", ["recebida", "andamento"] as const);
     const permitidos =
       tipo === "recebida" ? (["atender", "recusar"] as const) : (["mudo", "viva_voz", "desligar"] as const);
@@ -157,11 +176,12 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
     return modo && alvo !== null ? { modelo: "camera", modo, alvo } : null;
   },
   teclado(d) {
-    const conteudo = typeof d.texto === "string" && d.texto.length <= 22 ? d.texto : null;
+    const conteudo = typeof d.texto === "string" && d.texto.length <= LIMITES.teclado.texto ? d.texto : null;
     const especiais = ["microfone", "apagar", "enviar"];
-    const ehLetra = typeof d.alvo === "string" && /^[a-zç]$/.test(d.alvo);
+    // Só letras que existem no teclado desenhado (sem "ç": a tecla não aparece no desenho).
+    const ehLetra = typeof d.alvo === "string" && /^[a-z]$/.test(d.alvo);
     const alvo = typeof d.alvo === "string" && (especiais.includes(d.alvo) || ehLetra) ? d.alvo : null;
-    const opcoes = d.opcoes === undefined ? [] : lista(d.opcoes, 1, 5, 2);
+    const opcoes = d.opcoes === undefined ? [] : lista(d.opcoes, 0, LIMITES.teclado.opcoesMax, LIMITES.teclado.opcao);
     return conteudo !== null && alvo && opcoes
       ? { modelo: "teclado", texto: conteudo, alvo, segurar: d.segurar === true, opcoes }
       : null;
@@ -171,7 +191,9 @@ const VALIDADORES: Record<ModeloIlustracao, Validador> = {
     const botoes = d.botoes.map((b) => umDe(b, ["ligar", "volume_mais", "volume_menos"] as const));
     if (!botoes.every((b): b is BotaoDoAparelho => b !== null)) return null;
     const segundos =
-      Number.isInteger(d.segundos) && (d.segundos as number) > 0 && (d.segundos as number) <= 15
+      Number.isInteger(d.segundos) &&
+      (d.segundos as number) > 0 &&
+      (d.segundos as number) <= LIMITES.aparelho.segundosMax
         ? (d.segundos as number)
         : undefined;
     return { modelo: "aparelho", botoes, juntos: d.juntos === true && botoes.length === 2, segundos };
