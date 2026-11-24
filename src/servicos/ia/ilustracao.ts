@@ -219,9 +219,16 @@ export function combinaComOPasso(espec: EspecIlustracao, passo: string): boolean
 
 /** Valida a descrição de uma ilustração. Devolve `null` (passo sem imagem) se algo não estiver certo. */
 export function validarIlustracao(dado: unknown, passo: string): EspecIlustracao | null {
-  if (!ehObjeto(dado)) return null;
+  const descartar = (motivo: string) => {
+    // Registro para ajustar as instruções da IA (F12 > Console). Só contém o que a IA gerou.
+    console.warn(`[Escuta Ativa] Ilustração descartada (${motivo}):`, { passo, ilustracao: dado });
+    return null;
+  };
+  if (!ehObjeto(dado)) return descartar("não é um objeto");
   const validador = VALIDADORES[dado.modelo as ModeloIlustracao];
-  if (!validador) return null;
+  if (!validador) return descartar("modelo desconhecido");
   const espec = validador(dado);
-  return espec && combinaComOPasso(espec, passo) ? espec : null;
+  if (!espec) return descartar("campos fora das regras ou dos limites de tamanho");
+  if (!combinaComOPasso(espec, passo)) return descartar("o dedo aponta para algo diferente do texto do passo");
+  return espec;
 }

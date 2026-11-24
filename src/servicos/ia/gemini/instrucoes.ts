@@ -13,7 +13,7 @@ Trate a pessoa por "você". Nunca use jargão técnico. Nunca culpe a pessoa.
 Considere um celular Android comum em português. Use os nomes que aparecem na tela entre aspas curvas, por exemplo: Toque em “Configurações”.`;
 
 /** Catálogo dos 13 modelos de ilustração, com os campos e limites que o app aceita. */
-const CATALOGO = `ILUSTRAÇÕES: cada passo pode ter uma "ilustracao", que é a descrição de uma tela simples desenhada pelo app, com um dedo apontando onde tocar. Escolha o modelo que mostra exatamente a ação do passo. Na dúvida, não mande ilustração.
+const CATALOGO = `ILUSTRAÇÕES: cada passo pode ter uma "ilustracao", que é a descrição de uma tela simples desenhada pelo app, com um dedo apontando onde tocar. Mande ilustração em todo passo cuja ação um dos modelos consegue mostrar (tocar num aplicativo, num item, num botão, numa chave, digitar, deslizar). Só deixe sem ilustração passos de conferir ou esperar. Respeite rigorosamente os limites de tamanho: textos maiores fazem a ilustração ser descartada; prefira nomes curtos.
 Regra obrigatória: se o texto do passo cita um nome entre aspas, o elemento apontado pelo dedo ("alvo") precisa ter esse mesmo nome.
 Limites de tamanho são em caracteres. "alvo" numérico é a posição na lista, começando em 0.
 1. apps: tela inicial com ícones. {modelo:"apps", apps:[2 a 6 nomes, até 14], alvo}
