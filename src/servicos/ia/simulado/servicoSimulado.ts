@@ -46,7 +46,7 @@ async function simularRede(sinal: AbortSignal): Promise<Simulacao | null> {
   const simulacao = lerSimulacao();
   switch (simulacao) {
     case "timeout":
-      await esperar(60_000, sinal); // nunca responde: o app encerra em 10 s
+      await esperar(60_000, sinal); // nunca responde: o app encerra em 15 s
       break;
     case "indisponivel":
       await esperar(1_000, sinal);

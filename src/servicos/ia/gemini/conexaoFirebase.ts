@@ -3,7 +3,7 @@
  *
  * - App Check com reCAPTCHA Enterprise: só o app nos domínios cadastrados consegue
  *   chamar a IA. O token vale 1 hora e é reaproveitado: um token novo a cada pergunta
- *   somava segundos de espera e estourava o limite de 10 s.
+ *   somava segundos de espera ao limite de resposta.
  * - Gemini Developer API (plano gratuito), com resposta em JSON no formato fixo.
  * - Em desenvolvimento (localhost), usa o token de depuração do App Check: o token
  *   aparece no console do navegador e precisa ser cadastrado no Firebase.
@@ -18,7 +18,7 @@ import type { GerarJSON } from "./servicoGemini";
 const TEMPERATURA = 0.3;
 
 /**
- * Raciocínio interno mínimo: as respostas são simples e o app espera no máximo 10 s.
+ * Raciocínio interno mínimo: as respostas são simples e o app espera no máximo 15 s.
  * Com o raciocínio padrão, perguntas vagas ("celular travando") passavam do limite.
  */
 const RACIOCINIO = ThinkingLevel.MINIMAL;
@@ -38,7 +38,7 @@ export function criarGeradorFirebase(): GerarJSON {
   });
   // Aquecimento: carrega o reCAPTCHA e obtém o token já ao abrir a tela, enquanto a
   // pessoa digita ou fala. Sem isso, a primeira pergunta pagava esse tempo e podia
-  // passar dos 10 s. Uma falha aqui não importa: o token é pedido de novo na pergunta.
+  // passar do limite. Uma falha aqui não importa: o token é pedido de novo na pergunta.
   void getToken(appCheck).catch(() => undefined);
   const ai = getAI(app, { backend: new GoogleAIBackend() });
 
@@ -55,7 +55,7 @@ export function criarGeradorFirebase(): GerarJSON {
     });
     const inicio = performance.now();
     const resultado = await modelo.generateContent(texto, { signal: sinal });
-    // Tempo de resposta no console (F12), para acompanhar o limite de 10 s.
+    // Tempo de resposta no console (F12), para acompanhar o limite de 15 s.
     console.info(`[Escuta Ativa] Gemini respondeu em ${Math.round(performance.now() - inicio)} ms`);
     return resultado.response.text();
   };

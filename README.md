@@ -53,7 +53,7 @@ As lições não usam IA, o que reduz o risco de instruções incorretas nos con
 | Situação                                 | Comportamento                                     |
 | ---------------------------------------- | ------------------------------------------------- |
 | Resposta demorada                        | Aviso "Estou pensando..." após 5 s                |
-| Sem resposta                             | Encerramento em 10 s, com opção de tentar de novo |
+| Sem resposta                             | Encerramento em 15 s, com opção de tentar de novo |
 | Serviço indisponível                     | Nova tentativa automática após 2 s                |
 | Limite de requisições (429)              | Aviso de pausa, sem nova tentativa                |
 | Resposta fora do formato                 | Descarte e mensagem de erro                       |
