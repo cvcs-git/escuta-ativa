@@ -1,41 +1,38 @@
-/* T2 Início: cabeçalho, botão "Ouvir esta tela" e cartões sobre a folha de leitura. */
+/* T2 Início: topo centralizado (símbolo, nome, pergunta, ouvir e silêncio) e cartões sobre a folha. */
 
 .inicio__topo {
-  padding: 22px 4px 26px;
+  padding: 18px 4px 24px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  text-align: center;
 }
 
-.inicio__marca {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.inicio__simbolo {
+  display: block;
+  width: auto;
+  height: 84px;
+}
+
+/* Nome em maiúsculas espaçadas, para lembrar o logotipo. */
+.inicio__nome {
+  margin-top: 6px;
   font-size: 0.75rem;
   font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
   color: var(--texto-apoio);
-  margin-bottom: 14px;
-}
-
-.inicio__ponto {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--acao);
-}
-
-.inicio__saudacao {
-  font-size: 1.6rem;
-  line-height: 1.1;
 }
 
 .inicio__pergunta {
-  font-size: 1.05rem;
-  color: var(--texto-apoio);
+  margin-top: 10px;
+  font-size: 1.25rem;
+  line-height: 1.2;
 }
 
 .inicio__acoes {
-  margin-top: 14px;
+  margin-top: 16px;
+  justify-content: center;
   display: flex;
   align-items: center;
   gap: 16px;

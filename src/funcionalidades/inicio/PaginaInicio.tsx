@@ -1,8 +1,8 @@
 /**
- * T2 Início (wf_01): ondas sonoras em tela inteira e, por cima delas, a mesma folha de
- * leitura opaca do Perguntar e do Isso é golpe?, com três cartões do mesmo tamanho.
- * "Ouvir esta tela" lê as opções, e cada cartão se destaca quando o nome dele é falado
- * (ajuda quem não lê). Ao lado dele fica o botão de silêncio.
+ * T2 Início (wf_01): no topo, centralizados, o símbolo do Escuta Ativa, o nome, a
+ * pergunta "O que você quer fazer?" e os botões de ouvir e de silêncio. Embaixo, sobre a
+ * folha de leitura, três cartões do mesmo tamanho. "Ouvir esta tela" lê a pergunta e as
+ * opções, e cada cartão se destaca quando o nome dele é falado (ajuda quem não lê).
  */
 import { Link, Navigate } from "react-router-dom";
 import { BotaoLink } from "@/compartilhado/componentes/Botao";
@@ -19,6 +19,7 @@ import { Rodape, Tela } from "@/compartilhado/componentes/Tela";
 import { TextoLido } from "@/compartilhado/componentes/TextoLido";
 import { usePreferencias } from "@/compartilhado/preferencias/PreferenciasProvider";
 import { useFala } from "@/servicos/voz/FalaProvider";
+import simbolo from "@/compartilhado/marca/simbolo-escuta-ativa.webp";
 import "./inicio.css";
 
 const OPCOES = [
@@ -29,13 +30,6 @@ const OPCOES = [
 const PERGUNTA = "O que você quer fazer?";
 const AJUSTES = "Ajustes de letra e voz";
 
-function saudacaoDoHorario() {
-  const hora = new Date().getHours();
-  if (hora < 12) return "Bom dia!";
-  if (hora < 18) return "Boa tarde!";
-  return "Boa noite!";
-}
-
 export default function PaginaInicio() {
   const { configurado } = usePreferencias();
   const { falar, falando, parar } = useFala();
@@ -43,19 +37,16 @@ export default function PaginaInicio() {
   // Primeiro acesso: vai para as boas-vindas.
   if (!configurado) return <Navigate to="/boas-vindas" replace />;
 
-  const saudacao = saudacaoDoHorario();
-  const lerTela = () =>
-    falar([saudacao, PERGUNTA, ...OPCOES.map((o) => `${o.rotulo}.`), `${AJUSTES}.`].join(" "), true);
+  const lerTela = () => falar([PERGUNTA, ...OPCOES.map((o) => `${o.rotulo}.`), `${AJUSTES}.`].join(" "), true);
 
   const cabecalho = (
     <header className="inicio__topo">
-      <p className="inicio__marca">
-        <span className="inicio__ponto" aria-hidden="true" /> Escuta Ativa
-      </p>
-      <h1 className="inicio__saudacao">
-        <TextoLido texto={saudacao} />
+      {/* O nome vem em texto (não na imagem): fica nítido, centralizado e é lido pelo leitor de tela. */}
+      <img className="inicio__simbolo" src={simbolo} alt="" width={500} height={255} />
+      <p className="inicio__nome">Escuta Ativa</p>
+      <h1 className="inicio__pergunta">
+        <TextoLido texto={PERGUNTA} />
       </h1>
-      <TextoLido como="p" className="inicio__pergunta" texto={PERGUNTA} />
       <div className="inicio__acoes">
         <button type="button" className="inicio__ouvir" onClick={falando ? parar : lerTela}>
           <IconeAltoFalante /> {falando ? "Parar a leitura" : "Ouvir esta tela"}
