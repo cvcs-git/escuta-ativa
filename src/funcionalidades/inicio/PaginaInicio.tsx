@@ -1,7 +1,8 @@
 /**
- * T2 Início (wf_01): ondas sonoras em tela inteira atrás de três cartões de vidro
- * do mesmo tamanho. "Ouvir esta tela" lê as opções, e cada cartão se destaca quando
- * o nome dele é falado (ajuda quem não lê).
+ * T2 Início (wf_01): ondas sonoras em tela inteira e, por cima delas, a mesma folha de
+ * leitura opaca do Perguntar e do Isso é golpe?, com três cartões do mesmo tamanho.
+ * "Ouvir esta tela" lê as opções, e cada cartão se destaca quando o nome dele é falado
+ * (ajuda quem não lê).
  */
 import { Link, Navigate } from "react-router-dom";
 import { BotaoLink } from "@/compartilhado/componentes/Botao";
@@ -63,7 +64,7 @@ export default function PaginaInicio() {
   return (
     <>
       <Ondas estado={falando ? "falando" : "repouso"} />
-      <Tela titulo="Escuta Ativa" voltar={false} cabecalho={cabecalho}>
+      <Tela titulo="Escuta Ativa" voltar={false} cabecalho={cabecalho} folha>
         <nav className="inicio__opcoes" aria-label="Opções principais">
           {OPCOES.map(({ rota, rotulo, Icone }) => (
             <Link key={rota} className="cartao-vidro" to={rota}>
