@@ -5,7 +5,11 @@
  * esquema e texto ao modelo e devolve o JSON em texto. Assim a lógica (montar o
  * pedido, interpretar a resposta, converter erros) é testada sem rede, e a conexão
  * real fica isolada em `conexaoFirebase.ts`.
+ *
+ * Todo texto da pessoa passa por `mascararDadosSensiveis` antes de sair do aparelho:
+ * CPF, cartão, conta, senha e códigos nunca chegam ao Google.
  */
+import { mascararDadosSensiveis } from "@/servicos/seguranca/dadosSensiveis";
 import { ErroIA, type ServicoIA } from "../contrato";
 import { validarAssistente, validarGolpe } from "../validacao";
 import { ESQUEMA_ASSISTENTE, ESQUEMA_GOLPE, ESQUEMA_OUTRO_JEITO } from "./esquemas";
@@ -54,7 +58,7 @@ export function lerJSON(texto: string): unknown {
 export function criarServicoGemini(gerar: GerarJSON): ServicoIA {
   const pedir = async (pedido: PedidoGemini, sinal: AbortSignal) => {
     try {
-      return lerJSON(await gerar(pedido, sinal));
+      return lerJSON(await gerar({ ...pedido, texto: mascararDadosSensiveis(pedido.texto) }, sinal));
     } catch (erro) {
       throw converterErro(erro);
     }

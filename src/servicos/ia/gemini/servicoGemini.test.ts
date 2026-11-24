@@ -60,6 +60,14 @@ describe("servicoGemini: perguntar", () => {
   });
 });
 
+describe("servicoGemini: privacidade", () => {
+  it("nunca envia CPF ou senha ao modelo", async () => {
+    const { gerar, pedidos } = geradorFalso('{"dentroDoEscopo":true,"passos":[{"texto":"Abra o banco."}]}');
+    await criarServicoGemini(gerar).perguntar("Meu CPF é 123.456.789-00 e a senha é abc123", sinal);
+    expect(pedidos[0].texto).toBe("Meu CPF é •••• e a senha é ••••");
+  });
+});
+
 describe("servicoGemini: golpe e outro jeito", () => {
   it("coloca a mensagem entre marcas, separada das instruções", async () => {
     const { gerar, pedidos } = geradorFalso(
