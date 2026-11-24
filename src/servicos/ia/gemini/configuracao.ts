@@ -14,8 +14,8 @@ export const CONFIG_FIREBASE = {
   appId: "1:632960023444:web:7d808107e641ddff16ed81",
 } as const;
 
-/** Chave do site do reCAPTCHA Enterprise usada pelo App Check. Vazia: o app usa a simulação. */
-export const CHAVE_RECAPTCHA = "";
+/** Chave do site do reCAPTCHA Enterprise (Fraud Defense) usada pelo App Check. Vazia: o app usa a simulação. */
+export const CHAVE_RECAPTCHA = "6Le8mzAuAAAAAPo865uvPHomuD6oJY5qDy8BSUxS";
 
 /** Modelo do Gemini (plano gratuito). Trocar aqui se o Google aposentar o modelo. */
 export const MODELO_GEMINI = "gemini-3.5-flash-lite";
