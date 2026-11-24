@@ -17,7 +17,10 @@ export const CONFIG_FIREBASE = {
 /** Chave do site do reCAPTCHA Enterprise (Fraud Defense) usada pelo App Check. Vazia: o app usa a simulação. */
 export const CHAVE_RECAPTCHA = "6Le8mzAuAAAAAPo865uvPHomuD6oJY5qDy8BSUxS";
 
-/** Modelo do Gemini (plano gratuito). Trocar aqui se o Google aposentar o modelo. */
-export const MODELO_GEMINI = "gemini-3.5-flash-lite";
+/**
+ * Modelo do Gemini (plano gratuito). Trocar aqui se o Google aposentar o modelo.
+ * O 3.5 Flash-Lite ficou sobrecarregado nos testes (erro 500 "high demand").
+ */
+export const MODELO_GEMINI = "gemini-3.1-flash-lite";
 
 export const geminiConfigurado = () => CHAVE_RECAPTCHA.length > 0;
