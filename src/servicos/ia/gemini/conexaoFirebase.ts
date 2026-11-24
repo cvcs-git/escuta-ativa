@@ -38,7 +38,7 @@ export function criarGeradorFirebase(): GerarJSON {
       generationConfig: {
         temperature: TEMPERATURA,
         responseMimeType: "application/json",
-        responseJsonSchema: esquema,
+        ...(esquema ? { responseJsonSchema: esquema } : {}),
       },
     });
     const resultado = await modelo.generateContent(texto, { signal: sinal });

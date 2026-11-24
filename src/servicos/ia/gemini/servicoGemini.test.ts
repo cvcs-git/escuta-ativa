@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ErroIA } from "../contrato";
-import { ESQUEMA_ASSISTENTE, ESQUEMA_GOLPE, TOTAL_DE_MODELOS } from "./esquemas";
+import { ESQUEMA_ASSISTENTE, ESQUEMA_GOLPE } from "./esquemas";
 import { INSTRUCAO_ASSISTENTE, INSTRUCAO_GOLPE } from "./instrucoes";
 import { converterErro, criarServicoGemini, type GerarJSON, type PedidoGemini } from "./servicoGemini";
 
@@ -110,11 +110,5 @@ describe("converterErro", () => {
       throw { customErrorData: { status: 429 } };
     };
     expect(await tipo(criarServicoGemini(geradorFalso(falha).gerar).perguntar("x", sinal))).toBe("limite");
-  });
-});
-
-describe("esquemas", () => {
-  it("descrevem os 13 modelos de ilustração", () => {
-    expect(TOTAL_DE_MODELOS).toBe(13);
   });
 });

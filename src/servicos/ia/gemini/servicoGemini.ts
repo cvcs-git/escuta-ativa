@@ -23,7 +23,8 @@ import {
 
 export type PedidoGemini = {
   instrucao: string;
-  esquema: Record<string, unknown>;
+  /** `null`: só modo JSON, sem esquema. */
+  esquema: Record<string, unknown> | null;
   texto: string;
 };
 

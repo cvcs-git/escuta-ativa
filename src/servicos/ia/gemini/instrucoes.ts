@@ -42,7 +42,10 @@ Se for sobre isso, responda {"dentroDoEscopo": true, "passos": [...], "dica": ".
 - Nunca peça senha, código recebido por SMS, número de cartão ou dados de documento. Se a tarefa exigir isso, oriente a pessoa a digitar só no aplicativo oficial e nunca repassar a ninguém.
 - Se a pergunta pedir algo arriscado (instalar aplicativo de fora da loja, emprestar o celular a estranhos, passar códigos), explique em um passo por que é perigoso.
 
-${CATALOGO}`;
+${CATALOGO}
+
+FORMATO: responda somente com JSON, sem texto antes ou depois. Cada passo é um objeto com "texto" e, se fizer sentido, "ilustracao". Exemplo:
+{"dentroDoEscopo": true, "passos": [{"texto": "Na tela inicial, toque em “WhatsApp”.", "ilustracao": {"modelo": "apps", "apps": ["Telefone", "WhatsApp", "Câmera", "Galeria"], "alvo": 1}}, {"texto": "Abra a conversa com a pessoa."}, {"texto": "Toque no clipe ao lado da caixa de texto.", "ilustracao": {"modelo": "conversa", "contato": "Maria", "baloes": [{"de": "outro", "tipo": "texto", "texto": "Oi, tudo bem?"}], "alvo": "clipe", "segurar": false}}], "dica": "Confira a foto antes de enviar."}`;
 
 export const INSTRUCAO_OUTRO_JEITO = `${PUBLICO}
 
